@@ -1,0 +1,88 @@
+/// Mixins reference: https://www.sitepoint.com/sass-theming-neverending-story/
+$themes: (
+  cozy: (
+    'primary-bc': #100901,
+    'primary-bc-saturate': saturate(#100901, 10%),
+    'primary-bc-desaturate': desaturate(#100901, 10%),
+    'primary-fc': #fffefd,
+    'primary-fc-saturate': saturate(#fffefd, 10%),
+    'primary-fc-desaturate': desaturate(#fffefd, 10%),
+    'secondary-fc': #a0a0a0,
+    'secondary-fc-saturate': saturate(#a0a0a0, 10%),
+    'secondary-fc-desaturate': desaturate(#a0a0a0, 10%),
+    'active-fc': #ed9123,
+    'active-fc-saturate': saturate(#ed9123, 10%),
+    'active-fc-desaturate': desaturate(#ed9123, 10%),
+    'visited-fc': #4794f0,
+    'visited-fc-saturate': saturate(#4794f0, 10%),
+    'visited-fc-desaturate': desaturate(#4794f0, 10%)
+  ),
+  sunset: (
+    'primary-bc': #fffdfc,
+    'primary-bc-saturate': saturate(#fffdfc, 10%),
+    'primary-bc-desaturate': desaturate(#fffdfc, 10%),
+    'primary-fc': #0f0901,
+    'primary-fc-saturate': saturate(#0f0901, 10%),
+    'primary-fc-desaturate': desaturate(#0f0901, 10%),
+    'secondary-fc': #211303,
+    'secondary-fc-saturate': saturate(#211303, 10%),
+    'secondary-fc-desaturate': desaturate(#211303, 10%),
+    'active-fc': #f4be7d,
+    'active-fc-saturate': saturate(#f4be7d, 10%),
+    'active-fc-desaturate': desaturate(#f4be7d, 10%),
+    'visited-fc': #7db3f4,
+    'visited-fc-saturate': saturate(#7db3f4, 10%),
+    'visited-fc-desaturate': desaturate(#7db3f4, 10%)
+  )
+) !default;
+
+/// Themify mixin
+/// @access private
+/// @author Hugo Giraudel
+/// @param {String} $property - Property to themify
+/// @param {String} $key - Key color to use from theme
+/// @param {Map} $themes [$themes] - Map of themes to use
+@mixin themify($property, $key, $themes: $themes) {
+  // Iterate over the themes
+  @each $theme, $colors in $themes {
+    // Create a selector (e.g. `.media.theme-unicorn, .theme-unicorn .media`)
+    &.theme-#{$theme},
+    .theme-#{$theme} & {
+      // Output the declaration
+      #{$property}: map-get($colors, $key);
+    }
+  }
+}
+
+/// Shorthand to themify color through `themify` mixin
+/// @access public
+/// @see {mixin} themify
+@mixin color($arguments...) {
+  @include themify('color', $arguments...);
+}
+
+/// Shorthand to themify border-color through `themify` mixin
+/// @access public
+/// @see {mixin} themify
+@mixin border-color($arguments...) {
+  @include themify('border-color', $arguments...);
+}
+@mixin border-top-color($arguments...) {
+  @include themify('border-top-color', $arguments...);
+}
+@mixin border-right-color($arguments...) {
+  @include themify('border-right-color', $arguments...);
+}
+@mixin border-bottom-color($arguments...) {
+  @include themify('border-bottom-color-color', $arguments...);
+}
+@mixin border-left-color($arguments...) {
+  @include themify('border-left-color', $arguments...);
+}
+
+/// Shorthand to themify background-color through `themify` mixin
+/// @access public
+/// @see {mixin} themify
+@mixin background-color($arguments...) {
+  @include themify('background-color', $arguments...);
+}
