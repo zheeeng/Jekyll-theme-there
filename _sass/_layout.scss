@@ -1,3 +1,42 @@
+$sidebar-width: 360px;
+
+.site {
+  .s-collapsed & {
+    &_sidebar {
+      right: -$sidebar-width;
+    }
+
+    &_content {
+      right: 0;
+    }
+  }
+
+  &_sidebar {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    right: 0;
+    width: $sidebar-width;
+    overflow-y: auto;
+    @include color('primary-fc');
+    @include background-color('primary-bc');
+    transition: right .25s ease;
+  }
+
+  &_content {
+    position: absolute;
+    top: 0;
+    right: $sidebar-width;
+    bottom: 0;
+    left: 0;
+    width: auto;
+    overflow-y: auto;
+    @include color('primary-fc');
+    @include background-color('primary-bc');
+    transition: right .25s ease;
+  }
+}
+
 /**
  * Site header
  */

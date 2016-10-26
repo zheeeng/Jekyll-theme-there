@@ -3,17 +3,25 @@
 
   {% include head.html %}
 
-  <body>
+  <body class="site">
 
-    {% include header.html %}
+    <aside class="site_sidebar theme-cozy">
 
-    <div class="site_content">
+      {% include sidebar.html %}
+
+    </aside>
+
+    <div class="site_content theme-sunset">
 
       {{ content }}
 
     </div>
 
-    {% include footer.html %}
+    <footer class="site_footer">
+
+      {% include footer.html %}
+
+    </footer>
 
     {% include scripts.html %}
 
