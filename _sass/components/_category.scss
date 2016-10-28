@@ -1,11 +1,25 @@
-$category-ml: 20px;
-$category-list-pl: 40px;
-$category-list-ml: 20px;
+$category-mtb: 1rem;
+$category-ml: 1.5rem;
+$category-mr: 1rem;
+$category-list-pl: 1.5rem;
+$category-list-ml: .5rem;
+
+%font-color-transition {
+  transition : color .2s ease-in;
+}
+%border-color-transition {
+  transition : border-color .4s ease-in;
+}
 
 %category-base {
   font-size: 1rem;
-  h1, h2, h3, h4, h5, h6 {
+  h1 {
     font-size: 1.25em;
+    font-weight: 500;
+  }
+  h2, h3, h4, h5, h6 {
+    font-size: 1em;
+    font-weight: 400;
   }
   p {
     font-size: 1em;
@@ -25,7 +39,27 @@ $category-list-ml: 20px;
 .category {
   @extend %category-base;
 
-  margin: $category-ml;
+  margin: $category-mtb $category-mr $category-mtb $category-ml;
+
+  &_icon {
+
+    &-stack {
+      position: absolute;
+      left: -$category-list-pl;
+      margin-left: -1em;
+      font-size: .75em;
+      @include background-color('primary-bc');
+
+      a:visited > & {
+        @include color('visited-fc');
+      }
+    }
+    &-wrapper {
+      @include color('secondary-fc');
+    }
+    & {
+    }
+  }
 
   &_latest-articles {
     @extend %category-list-item;
@@ -33,24 +67,71 @@ $category-list-ml: 20px;
     border-left-style: solid;
     border-left-width: 1px;
   }
+
+  &_view-more-articles {
+    margin: 1.5em 0;
+    text-align: center;
+    font-size: .875em;
+
+    &-btn {
+      padding: .5em 1em;
+      @include border-color('secondary-fc');
+      border-style: solid;
+      border-width: 1px;
+      border-radius: 1em;
+      @extend %border-color-transition;
+      &:hover {
+        @include border-color('primary-fc');
+      }
+    }
+  }
+
   &_archive {
     @extend %category-list-item;
   }
 
   &_heading {
+    position: relative;
     @include color('active-fc');
   }
-  &_entry-title {
-    @include color('primary-fc');
-    margin-top: 10px;
-    margin-bottom: 5px;
-  }
-  &_entry-text {
-    @include color('secondary-fc');
-    margin-bottom: 5px;
-  }
-  &_entry-meta {
-    @include color('secondary-fc');
-    margin-bottom: 5px;
+  &_entry {
+    &-title {
+      position: relative;
+      @include color('primary-fc');
+      margin-top: .5em;
+      margin-bottom: .3em;
+      @extend %font-color-transition;
+    }
+    &:hover &-title {
+      @include color('active-fc');
+    }
+    &-excerpt {
+      @include color('secondary-fc');
+      margin-bottom: .3em;
+      @extend %font-color-transition;
+    }
+    &:hover &-excerpt {
+      @include color('primary-fc');
+    }
+    &-meta {
+      @include color('secondary-fc');
+      margin-bottom: .3em;
+      font-style: italic;
+
+      &-dat3 {
+        @extend %font-color-transition;
+      }
+      &-comments {
+        @extend %font-color-transition;
+      }
+    }
+    &:hover &-meta {
+      &-date {
+        @include color('primary-fc');
+      }
+      &-comments {
+        @include color('primary-fc');
+      }
+    }
   }
 }

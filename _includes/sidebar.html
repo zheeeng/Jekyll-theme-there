@@ -1,0 +1,70 @@
+<div class="category">
+
+  <div class="category_latest-articles">
+
+    <h1 class="category_heading">
+      <span class="fa-stack category_icon-stack">
+        <i class="fa fa-circle-thin fa-stack-2x category_icon-wrapper"></i>
+        <i class="fa fa-bars fa-stack-1x category_icon"></i>
+      </span>
+      <a href="">Latest Articles</a>
+    </h1>
+
+    <ul>
+      {% for post in site.posts %}
+      <li class="category_entry">
+        <h2 class="category_entry-title">
+          <a href="{{ post.url | prepend: site.baseurl }}">
+            <span class="fa-stack category_icon-stack">
+              <i class="fa fa-circle-thin fa-stack-2x category_icon-wrapper"></i>
+              <i class="fa fa-circle fa-stack-1x category_icon"></i>
+            </span>
+            {{ post.title }}
+          </a>
+        </h2>
+        <p class="category_entry-excerpt">
+          <a href="{{ post.url | prepend: site.baseurl }}">
+            {{ post.excerpt | strip_html | strip_newlines | truncate: 160 }}
+          </a>
+        </p>
+        <div class="category_entry-meta">
+          <p>
+            <a href="{{ post.url | prepend: site.baseurl }}">
+              posted on <span class="category_entry-meta-date">{{ post.date | date: "%b %-d, %Y" }} </span>
+              comments: <span class="category_entry-meta-comments">120</span>
+            </a>
+          </p>
+        </div>
+      </li>
+      {% endfor %}
+    </ul>
+  </div>
+
+  <div class="category_view-more-articles">
+    <a class="category_view-more-articles-btn" href="#">VIEW MORE</a>
+  </div>
+
+  <div class="category_archive">
+
+    <h1 class="category_heading">
+      <span class="fa-stack category_icon-stack">
+        <i class="fa fa-circle-thin fa-stack-2x category_icon-wrapper"></i>
+        <i class="fa fa-folder fa-stack-1x category_icon"></i>
+      </span>
+      <a href="">Archive</a>
+    </h1>
+
+    <ul>
+      <li>August</li>
+      <li>July</li>
+      <li>June</li>
+      <li>May</li>
+      <li>2015</li>
+      <li>2014</li>
+    </ul>
+
+  </div>
+
+  <p class="rss-subscribe">subscribe <a href="{{ site.feedurl | prepend: site.baseurl }}">via RSS</a></p>
+
+</div>
