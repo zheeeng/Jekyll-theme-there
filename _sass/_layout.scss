@@ -17,9 +17,6 @@ $sidebar-width: 360px;
     bottom: 0;
     right: 0;
     width: $sidebar-width;
-    overflow-y: auto;
-    @include color('primary-fc');
-    @include background-color('primary-bc');
     transition: right .25s ease;
   }
 
