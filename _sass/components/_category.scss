@@ -48,7 +48,7 @@ $category-list-mr: 20px;
   border-left-width: 1px;
 
   &#{&}__with-time-line {
-    @include border-left-color('secondary-fc');
+    @include border-left-color('secondary-fc-darken');
   }
 }
 
@@ -61,7 +61,13 @@ $category-list-mr: 20px;
     &#{&}__latest-articles {
     }
 
-    &#{&}__archive {
+    &#{&}__categories {
+    }
+
+    &#{&}__tags {
+    }
+
+    &#{&}__archives {
     }
   }
 
@@ -78,7 +84,7 @@ $category-list-mr: 20px;
     }
 
     &-stack &-wrapper {
-      @include color('secondary-fc');
+      @include color('secondary-fc-darken');
     }
 
     &-stack & {
@@ -139,7 +145,7 @@ $category-list-mr: 20px;
 
   &_btn {
     padding: .5em 1em;
-    @include border-color('secondary-fc');
+    @include border-color('secondary-fc-darken');
     border-style: solid;
     border-width: 1px;
     border-radius: 1em;
