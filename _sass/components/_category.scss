@@ -15,18 +15,35 @@ $category-list-mr: 1rem;
   h1 {
     font-size: 1.25em;
     font-weight: 500;
-    margin-bottom: .5em;
+    padding-bottom: .5em;
+    margin-bottom: 0;
   }
   h2, h3, h4, h5, h6 {
     font-size: 1em;
     font-weight: 400;
-    margin-bottom: .3em;
+    padding-bottom: .3em;
+    margin-bottom: 0;
   }
   p {
     font-size: 1em;
-    margin-bottom: .2em;
+    padding-bottom: .2em;
+    margin-bottom: 0;
   }
   @include clearstyle-list;
+}
+
+@mixin item-container {
+  position: relative;
+  padding: 0 0 1px $category-list-pl;
+  margin-left: $category-list-ml;
+  margin-right: $category-list-mr;
+  @include border-left-color('primary-bc');
+  border-left-style: solid;
+  border-left-width: 1px;
+
+  &#{&}__with-time-line {
+    @include border-left-color('secondary-fc');
+  }
 }
 
 .category {
@@ -38,31 +55,11 @@ $category-list-mr: 1rem;
     &#{&}__latest-articles {
     }
 
-    &#{&}__view-more-articles {
-      text-align: center;
-      font-size: .875em;
-    }
-
     &#{&}__archive {
     }
   }
 
-  &_item-container {
-    position: relative;
-    padding: 0 0 1px $category-list-pl;
-    margin-left: $category-list-ml;
-    margin-right: $category-list-mr;
-    @include border-left-color('primary-bc');
-    border-left-style: solid;
-    border-left-width: 1px;
-
-    &#{&}__with-time-line {
-      @include border-left-color('secondary-fc');
-    }
-  }
-
   &_icon {
-
     &-stack {
       position: absolute;
       left: -1em;
@@ -73,54 +70,65 @@ $category-list-mr: 1rem;
         @include color('visited-fc');
       }
     }
+
     &-wrapper {
       @include color('secondary-fc');
     }
+
     & {
     }
   }
 
   &_heading {
+    @include item-container;
+    @include color('active-fc');
+  }
+}
+
+.category-post {
+  @include item-container;
+
+  &_title {
+    @include color('primary-fc');
+    @extend %font-color-transition;
+  }
+  &:hover &_title {
     @include color('active-fc');
   }
 
-  &_entry {
-    &-title {
-      @include color('primary-fc');
+  &_excerpt {
+    @include color('secondary-fc');
+    margin-bottom: .3em;
+    @extend %font-color-transition;
+  }
+  &:hover &_excerpt {
+    @include color('primary-fc');
+  }
+
+  &_meta {
+    @include color('secondary-fc');
+    font-style: italic;
+
+    &-date {
       @extend %font-color-transition;
     }
-    &:hover &-title {
-      @include color('active-fc');
-    }
-
-    &-excerpt {
-      @include color('secondary-fc');
-      margin-bottom: .3em;
+    &-comments {
       @extend %font-color-transition;
     }
-    &:hover &-excerpt {
+  }
+  &:hover &_meta {
+    &-date {
       @include color('primary-fc');
     }
-
-    &-meta {
-      @include color('secondary-fc');
-      font-style: italic;
-
-      &-date {
-        @extend %font-color-transition;
-      }
-      &-comments {
-        @extend %font-color-transition;
-      }
+    &-comments {
+      @include color('primary-fc');
     }
-    &:hover &-meta {
-      &-date {
-        @include color('primary-fc');
-      }
-      &-comments {
-        @include color('primary-fc');
-      }
-    }
+  }
+
+  &_view-more-articles {
+    margin: $category-mtb 0;
+    text-align: center;
+    font-size: .875em;
   }
 
   &_btn {
