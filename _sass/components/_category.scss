@@ -1,8 +1,7 @@
 $category-mtb: 1rem;
-$category-ml: 1.5rem;
-$category-mr: 1rem;
 $category-list-pl: 1.5rem;
-$category-list-ml: .5rem;
+$category-list-ml: 1.5rem;
+$category-list-mr: 1rem;
 
 %font-color-transition {
   transition : color .2s ease-in;
@@ -16,37 +15,57 @@ $category-list-ml: .5rem;
   h1 {
     font-size: 1.25em;
     font-weight: 500;
+    margin-bottom: .5em;
   }
   h2, h3, h4, h5, h6 {
     font-size: 1em;
     font-weight: 400;
+    margin-bottom: .3em;
   }
   p {
     font-size: 1em;
+    margin-bottom: .2em;
   }
-}
-
-%category-list-item {
-  padding-left: $category-list-pl;
-  margin-left: $category-list-ml;
-  ul {
-    list-style-type: none;
-    padding: 0;
-    margin: 0;
-  }
+  @include clearstyle-list;
 }
 
 .category {
   @extend %category-base;
 
-  margin: $category-mtb $category-mr $category-mtb $category-ml;
+  &_zone {
+    margin: $category-mtb 0;
+
+    &#{&}__latest-articles {
+    }
+
+    &#{&}__view-more-articles {
+      text-align: center;
+      font-size: .875em;
+    }
+
+    &#{&}__archive {
+    }
+  }
+
+  &_item-container {
+    position: relative;
+    padding: 0 0 1px $category-list-pl;
+    margin-left: $category-list-ml;
+    margin-right: $category-list-mr;
+    @include border-left-color('primary-bc');
+    border-left-style: solid;
+    border-left-width: 1px;
+
+    &#{&}__with-time-line {
+      @include border-left-color('secondary-fc');
+    }
+  }
 
   &_icon {
 
     &-stack {
       position: absolute;
-      left: -$category-list-pl;
-      margin-left: -1em;
+      left: -1em;
       font-size: .75em;
       @include background-color('primary-bc');
 
@@ -61,50 +80,19 @@ $category-list-ml: .5rem;
     }
   }
 
-  &_latest-articles {
-    @extend %category-list-item;
-    @include border-left-color('secondary-fc');
-    border-left-style: solid;
-    border-left-width: 1px;
-  }
-
-  &_view-more-articles {
-    margin: 1.5em 0;
-    text-align: center;
-    font-size: .875em;
-
-    &-btn {
-      padding: .5em 1em;
-      @include border-color('secondary-fc');
-      border-style: solid;
-      border-width: 1px;
-      border-radius: 1em;
-      @extend %border-color-transition;
-      &:hover {
-        @include border-color('primary-fc');
-      }
-    }
-  }
-
-  &_archive {
-    @extend %category-list-item;
-  }
-
   &_heading {
-    position: relative;
     @include color('active-fc');
   }
+
   &_entry {
     &-title {
-      position: relative;
       @include color('primary-fc');
-      margin-top: .5em;
-      margin-bottom: .3em;
       @extend %font-color-transition;
     }
     &:hover &-title {
       @include color('active-fc');
     }
+
     &-excerpt {
       @include color('secondary-fc');
       margin-bottom: .3em;
@@ -113,12 +101,12 @@ $category-list-ml: .5rem;
     &:hover &-excerpt {
       @include color('primary-fc');
     }
+
     &-meta {
       @include color('secondary-fc');
-      margin-bottom: .3em;
       font-style: italic;
 
-      &-dat3 {
+      &-date {
         @extend %font-color-transition;
       }
       &-comments {
@@ -132,6 +120,19 @@ $category-list-ml: .5rem;
       &-comments {
         @include color('primary-fc');
       }
+    }
+  }
+
+  &_btn {
+    padding: .5em 1em;
+    @include border-color('secondary-fc');
+    border-style: solid;
+    border-width: 1px;
+    border-radius: 1em;
+    @extend %border-color-transition;
+
+    &:hover {
+      @include border-color('primary-fc');
     }
   }
 }
