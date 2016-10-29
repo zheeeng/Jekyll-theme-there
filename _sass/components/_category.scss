@@ -77,11 +77,11 @@ $category-list-mr: 20px;
       }
     }
 
-    &-wrapper {
+    &-stack &-wrapper {
       @include color('secondary-fc');
     }
 
-    & {
+    &-stack & {
     }
   }
 
@@ -115,18 +115,18 @@ $category-list-mr: 20px;
     @include color('secondary-fc');
     font-style: italic;
 
-    &-date {
+    & &-date {
       @extend %font-color-transition;
     }
-    &-comments {
+    & &-comments {
       @extend %font-color-transition;
     }
   }
   &:hover &_meta {
-    &-date {
+    & &-date {
       @include color('primary-fc');
     }
-    &-comments {
+    & &-comments {
       @include color('primary-fc');
     }
   }
