@@ -1,7 +1,7 @@
-$category-mtb: 1rem;
-$category-list-pl: 1.5rem;
-$category-list-ml: 1.5rem;
-$category-list-mr: 1rem;
+$category-mtb: 20px;
+$category-list-pl: 25px;
+$category-list-ml: 25px;
+$category-list-mr: 20px;
 
 %font-color-transition {
   transition : color .2s ease-in;
@@ -148,5 +148,26 @@ $category-list-mr: 1rem;
     &:hover {
       @include border-color('primary-fc');
     }
+  }
+}
+
+.category-archive {
+  a {
+    display: block;
+    margin: 10px 15px;
+    padding: .3em 1.2em;
+    @include background-color('primary-bc-darken');
+    @include color('secondary-fc');
+
+    &:hover {
+      @include background-color('primary-bc-lighten');
+      @include color('primary-fc');
+    }
+  }
+  &_date {
+
+  }
+  &_count {
+    float: right;
   }
 }
