@@ -1,4 +1,4 @@
-@function getTopValue ($list) {
+@function get-top-value ($list) {
   $len: length($list);
   @if $len == 1 {
     @return nth($list, 1);
@@ -13,7 +13,7 @@
   }
 }
 
-@function getRightValue ($list) {
+@function get-right-value ($list) {
   $len: length($list);
   @if $len == 1 {
     @return nth($list, 1);
@@ -28,7 +28,7 @@
   }
 }
 
-@function getBottomValue ($list) {
+@function get-bottom-value ($list) {
   $len: length($list);
   @if $len == 1 {
     @return nth($list, 1);
@@ -43,7 +43,7 @@
   }
 }
 
-@function getLeftValue ($list) {
+@function get-left-value ($list) {
   $len: length($list);
   @if $len == 1 {
     @return nth($list, 1);

@@ -3,7 +3,7 @@ $overview-list-pl: 30px;
 $overview-list-ml: 36px;
 $overview-list-mr: 20px;
 $overview-link-mtb: 10px;
-$overview-link-mlr: $overview-list-ml / 2;
+$overview-link-mlr: get-right-value($overview-list-margin) / 2;
 
 @mixin font-color-transition {
   transition : color .2s ease-in;
@@ -45,9 +45,9 @@ $overview-link-mlr: $overview-list-ml / 2;
 @mixin item-container ($type) {
   @if $type == 'heading' {
     position: relative;
-    padding: 0 0 1px $overview-list-pl;
-    margin-left: $overview-list-ml;
-    margin-right: $overview-list-mr;
+    padding: $overview-list-padding;
+    margin-left: get-left-value($overview-list-margin);
+    margin-right: get-right-value($overview-list-margin);
     @include border-left-color('primary-bc');
     border-left-style: solid;
     border-left-width: 1px;
@@ -55,10 +55,11 @@ $overview-link-mlr: $overview-list-ml / 2;
     &__with-time-line {
       @include border-left-color('secondary-fc-darken');
     }
-  }
-  @if $type == 'entry' {
-    margin-left: $overview-list-ml;
-    margin-right: $overview-list-mr;
+  } @else if $type == 'entry' {
+    margin-left: get-left-value($overview-list-margin);
+    margin-right: get-right-value($overview-list-margin);
+  } @else {
+    @warn 'Container type \'#{$type}\' didn\'t define.';
   }
 }
 
@@ -100,7 +101,7 @@ $overview-link-mlr: $overview-list-ml / 2;
   @extend %overview-base;
 
   &_zone {
-    margin: $overview-mtb 0;
+    margin: $overview-margin;
 
     &#{&}__latest-articles {
     }
@@ -182,7 +183,7 @@ $overview-link-mlr: $overview-list-ml / 2;
   }
 
   &_view-more-articles {
-    margin: $overview-mtb 0;
+    margin: get-top-value($overview-margin) 0;
     text-align: center;
     font-size: .875em;
   }
