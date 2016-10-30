@@ -149,7 +149,7 @@ $overview-link-mlr: get-right-value($overview-list-margin) / 2;
     @include color('primary-fc');
     @include font-color-transition;
   }
-  &:hover &_title {
+  &:hover #{get-last-selector()}_title {
     @include color('active-fc');
   }
 
@@ -158,7 +158,7 @@ $overview-link-mlr: get-right-value($overview-list-margin) / 2;
     margin-bottom: .3em;
     @include font-color-transition;
   }
-  &:hover &_excerpt {
+  &:hover #{get-last-selector()}_excerpt {
     @include color('primary-fc');
   }
 
@@ -166,18 +166,18 @@ $overview-link-mlr: get-right-value($overview-list-margin) / 2;
     @include color('secondary-fc');
     font-style: italic;
 
-    & &-date {
+    & #{get-last-selector()}-date {
       @include font-color-transition;
     }
-    & &-comments {
+    & #{get-last-selector()}-comments {
       @include font-color-transition;
     }
   }
-  &:hover &_meta {
-    & &-date {
+  &:hover #{get-last-selector()}_meta {
+    & #{get-last-selector()}-date {
       @include color('primary-fc');
     }
-    & &-comments {
+    & #{get-last-selector()}-comments {
       @include color('primary-fc');
     }
   }
