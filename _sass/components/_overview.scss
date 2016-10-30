@@ -52,6 +52,20 @@ $overview-list-mr: 30px;
   }
 }
 
+@mixin item-link {
+  display: block;
+  margin: 10px 15px;
+  padding: .3em 1.2em;
+  @include background-color('primary-bc-darken');
+  @include color('secondary-fc');
+  @include font-color-transition;
+
+  &:hover {
+    @include background-color('primary-bc-lighten');
+    @include color('primary-fc');
+  }
+}
+
 .overview {
   @extend %overview-base;
 
@@ -158,7 +172,11 @@ $overview-list-mr: 30px;
 }
 
 .overview-categories {
-
+  &_link {
+    @include item-link;
+  }
+  &_name {
+  }
 }
 
 .overview-tags {
@@ -167,17 +185,7 @@ $overview-list-mr: 30px;
 
 .overview-archive {
   &_link {
-    display: block;
-    margin: 10px 15px;
-    padding: .3em 1.2em;
-    @include background-color('primary-bc-darken');
-    @include color('secondary-fc');
-    @include font-color-transition;
-
-    &:hover {
-      @include background-color('primary-bc-lighten');
-      @include color('primary-fc');
-    }
+    @include item-link;
   }
   &_date {
 
