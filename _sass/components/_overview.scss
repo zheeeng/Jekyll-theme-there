@@ -38,31 +38,59 @@ $overview-list-mr: 20px;
   @include clearstyle-list;
 }
 
-@mixin item-container {
-  position: relative;
-  padding: 0 0 1px $overview-list-pl;
-  margin-left: $overview-list-ml;
-  margin-right: $overview-list-mr;
-  @include border-left-color('primary-bc');
-  border-left-style: solid;
-  border-left-width: 1px;
+// create an item container
+// @param   {enumerable string}  type: the type of the container
+@mixin item-container ($type) {
+  @if $type == 'heading' {
+    position: relative;
+    padding: 0 0 1px $overview-list-pl;
+    margin-left: $overview-list-ml;
+    margin-right: $overview-list-mr;
+    @include border-left-color('primary-bc');
+    border-left-style: solid;
+    border-left-width: 1px;
 
-  &#{&}__with-time-line {
-    @include border-left-color('secondary-fc-darken');
+    &__with-time-line {
+      @include border-left-color('secondary-fc-darken');
+    }
+  }
+  @if $type == 'entry' {
+    margin-left: $overview-list-ml;
+    margin-right: $overview-list-mr;
   }
 }
 
-@mixin item-link {
-  display: block;
-  margin: 10px 15px;
-  padding: .3em 1.2em;
-  @include background-color('primary-bc-darken');
-  @include color('secondary-fc');
-  @include font-color-transition;
+// create an link
+// @param   {enumerable string}  type: the type of the link
+@mixin item-link ($type) {
+  @if $type == 'bar' {
+    display: block;
+    padding: .3em 1.2em;
+    margin: $overview-link-mtb $overview-link-mlr;
+    @include background-color('primary-bc-darken');
+    @include color('secondary-fc');
+    @include font-color-transition;
 
-  &:hover {
-    @include background-color('primary-bc-lighten');
-    @include color('primary-fc');
+    &:hover {
+      @include background-color('primary-bc-lighten');
+      @include color('primary-fc');
+    }
+  }
+  @if $type == 'tag' {
+    display: inline-block;
+    padding: .2em .5em;
+    margin: $overview-link-mtb/2 $overview-link-mlr/2;
+    border-style: solid;
+    border-width: 1px;
+    border-radius: 5px;
+    @include background-color('primary-bc-darken');
+    @include color('secondary-fc');
+    @include font-color-transition;
+
+    &:hover {
+      @include background-color('primary-bc-lighten');
+      @include color('primary-fc');
+    }
   }
 }
 
@@ -106,13 +134,13 @@ $overview-list-mr: 20px;
   }
 
   &_heading {
-    @include item-container;
+    @include item-container('heading');
     @include color('active-fc');
   }
 }
 
-.overview-post {
-  @include item-container;
+.overview .overview-post {
+  @include item-container('heading');
 
   &_title {
     @include color('primary-fc');
@@ -171,21 +199,31 @@ $overview-list-mr: 20px;
   }
 }
 
-.overview-categories {
+.overview .overview-categories {
   &_link {
-    @include item-link;
+    @include item-link('bar');
   }
   &_name {
   }
 }
 
-.overview-tags {
+.overview .overview-tags {
+  display: inline-block;
 
+  &_container {
+    @include item-container('entry');
+  }
+
+  &_link {
+    @include item-link('tag');
+  }
+  &_name {
+  }
 }
 
-.overview-archive {
+.overview .overview-archive {
   &_link {
-    @include item-link;
+    @include item-link('bar');
   }
   &_date {
 
