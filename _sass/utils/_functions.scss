@@ -1,0 +1,59 @@
+@function getTopValue ($list) {
+  $len: length($list);
+  @if $len == 1 {
+    @return nth($list, 1);
+  } @else if $len == 2 {
+    @return nth($list, 1);
+  } @else if $len == 3 {
+    @return nth($list, 1);
+  } @else if $len == 4 {
+    @return nth($list, 1);
+  } @else {
+    @error 'Incorrect parameter \'#{$list}\'';
+  }
+}
+
+@function getRightValue ($list) {
+  $len: length($list);
+  @if $len == 1 {
+    @return nth($list, 1);
+  } @else if $len == 2 {
+    @return nth($list, 2);
+  } @else if $len == 3 {
+    @return nth($list, 2);
+  } @else if $len == 4 {
+    @return nth($list, 2);
+  } @else {
+    @error 'Incorrect parameter \'#{$list}\'';
+  }
+}
+
+@function getBottomValue ($list) {
+  $len: length($list);
+  @if $len == 1 {
+    @return nth($list, 1);
+  } @else if $len == 2 {
+    @return nth($list, 1);
+  } @else if $len == 3 {
+    @return nth($list, 3);
+  } @else if $len == 4 {
+    @return nth($list, 3);
+  } @else {
+    @error 'Incorrect parameter \'#{$list}\'';
+  }
+}
+
+@function getLeftValue ($list) {
+  $len: length($list);
+  @if $len == 1 {
+    @return nth($list, 1);
+  } @else if $len == 2 {
+    @return nth($list, 2);
+  } @else if $len == 3 {
+    @return nth($list, 3);
+  } @else if $len == 4 {
+    @return nth($list, 4);
+  } @else {
+    @error 'Incorrect parameter \'#{$list}\'';
+  }
+}
