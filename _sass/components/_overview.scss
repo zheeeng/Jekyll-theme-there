@@ -1,7 +1,7 @@
-$category-mtb: 20px;
-$category-list-pl: 25px;
-$category-list-ml: 35px;
-$category-list-mr: 30px;
+$overview-mtb: 20px;
+$overview-list-pl: 25px;
+$overview-list-ml: 35px;
+$overview-list-mr: 30px;
 
 %font-color-transition {
   transition : color .2s ease-in;
@@ -10,7 +10,7 @@ $category-list-mr: 30px;
   transition : border-color .4s ease-in;
 }
 
-%category-base {
+%overview-base {
   width: 100%;
   height: 100%;
   font-size: 1rem;
@@ -40,9 +40,9 @@ $category-list-mr: 30px;
 
 @mixin item-container {
   position: relative;
-  padding: 0 0 1px $category-list-pl;
-  margin-left: $category-list-ml;
-  margin-right: $category-list-mr;
+  padding: 0 0 1px $overview-list-pl;
+  margin-left: $overview-list-ml;
+  margin-right: $overview-list-mr;
   @include border-left-color('primary-bc');
   border-left-style: solid;
   border-left-width: 1px;
@@ -52,11 +52,11 @@ $category-list-mr: 30px;
   }
 }
 
-.category {
-  @extend %category-base;
+.overview {
+  @extend %overview-base;
 
   &_zone {
-    margin: $category-mtb 0;
+    margin: $overview-mtb 0;
 
     &#{&}__latest-articles {
     }
@@ -97,7 +97,7 @@ $category-list-mr: 30px;
   }
 }
 
-.category-post {
+.overview-post {
   @include item-container;
 
   &_title {
@@ -138,7 +138,7 @@ $category-list-mr: 30px;
   }
 
   &_view-more-articles {
-    margin: $category-mtb 0;
+    margin: $overview-mtb 0;
     text-align: center;
     font-size: .875em;
   }
@@ -157,15 +157,15 @@ $category-list-mr: 30px;
   }
 }
 
-.category-categories {
+.overview-categories {
 
 }
 
-.category-tags {
+.overview-tags {
 
 }
 
-.category-archive {
+.overview-archive {
   &_link {
     display: block;
     margin: 10px 15px;

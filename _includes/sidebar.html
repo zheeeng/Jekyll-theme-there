@@ -1,37 +1,37 @@
-<div class="category">
+<div class="overview">
 
-  <div class="category_zone category_zone__latest-articles">
+  <div class="overview_zone overview_zone__latest-articles">
 
-    <h1 class="category_heading category_heading__with-time-line">
-      <span class="fa-stack category_icon-stack">
-        <i class="fa fa-circle-thin fa-stack-2x category_icon-wrapper"></i>
-        <i class="fa fa-bars fa-stack-1x category_icon"></i>
+    <h1 class="overview_heading overview_heading__with-time-line">
+      <span class="fa-stack overview_icon-stack">
+        <i class="fa fa-circle-thin fa-stack-2x overview_icon-wrapper"></i>
+        <i class="fa fa-bars fa-stack-1x overview_icon"></i>
       </span>
       <a href="#">Latest Articles</a>
     </h1>
 
     <ul>
       {% for post in site.posts %}
-      <li class="category-post category-post__with-time-line">
-        <h2 class="category-post_title">
+      <li class="overview-post overview-post__with-time-line">
+        <h2 class="overview-post_title">
           <a href="{{ post.url | prepend: site.baseurl }}">
-            <span class="fa-stack category_icon-stack">
-              <i class="fa fa-circle-thin fa-stack-2x category_icon-wrapper"></i>
-              <i class="fa fa-circle fa-stack-1x category_icon"></i>
+            <span class="fa-stack overview_icon-stack">
+              <i class="fa fa-circle-thin fa-stack-2x overview_icon-wrapper"></i>
+              <i class="fa fa-circle fa-stack-1x overview_icon"></i>
             </span>
             {{ post.title }}
           </a>
         </h2>
-        <p class="category-post_excerpt">
+        <p class="overview-post_excerpt">
           <a href="{{ post.url | prepend: site.baseurl }}">
             {{ post.excerpt | strip_html | strip_newlines | truncate: 160 }}
           </a>
         </p>
-        <div class="category-post_meta">
+        <div class="overview-post_meta">
           <p>
             <a href="{{ post.url | prepend: site.baseurl }}">
-              posted on <span class="category-post_meta-date">{{ post.date | date: "%b %-d, %Y" }} </span>
-              comments: <span class="category-post_meta-comments">120</span>
+              posted on <span class="overview-post_meta-date">{{ post.date | date: "%b %-d, %Y" }} </span>
+              comments: <span class="overview-post_meta-comments">120</span>
             </a>
           </p>
         </div>
@@ -39,58 +39,76 @@
       {% endfor %}
     </ul>
 
-    <div class="category-post_view-more-articles">
-      <a class="category-post_btn" href="#">VIEW MORE</a>
+    <div class="overview-post_view-more-articles">
+      <a class="overview-post_btn" href="#">VIEW MORE</a>
     </div>
 
   </div>
 
-  <div class="category_zone category_zone__categories">
-    <h1 class="category_heading">
-      <span class="fa-stack category_icon-stack">
-        <i class="fa fa-circle-thin fa-stack-2x category_icon-wrapper"></i>
-        <i class="fa fa-book fa-stack-1x category_icon"></i>
+  <div class="overview_zone overview_zone__categories">
+    <h1 class="overview_heading">
+      <span class="fa-stack overview_icon-stack">
+        <i class="fa fa-circle-thin fa-stack-2x overview_icon-wrapper"></i>
+        <i class="fa fa-book fa-stack-1x overview_icon"></i>
       </span>
       <a href="">Categories</a>
     </h1>
+
+    <ul>
+      <li class="overview-archive">
+        <a href="#">
+          <span class="overview-archive_date">Tech</span>
+        </a>
+      </li>
+      <li class="overview-archive">
+        <a href="#">
+          <span class="overview-archive_date">Life</span>
+        </a>
+      </li>
+      <li class="overview-archive">
+        <a href="#">
+          <span class="overview-archive_date">Sport</span>
+        </a>
+      </li>
+    </ul>
   </div>
 
-  <div class="category_zone category_zone__tags">
-    <h1 class="category_heading">
-      <span class="fa-stack category_icon-stack">
-        <i class="fa fa-circle-thin fa-stack-2x category_icon-wrapper"></i>
-        <i class="fa fa-tags fa-stack-1x category_icon"></i>
+  <div class="overview_zone overview_zone__tags">
+    <h1 class="overview_heading">
+      <span class="fa-stack overview_icon-stack">
+        <i class="fa fa-circle-thin fa-stack-2x overview_icon-wrapper"></i>
+        <i class="fa fa-tags fa-stack-1x overview_icon"></i>
       </span>
       <a href="">Tags</a>
     </h1>
   </div>
 
-  <div class="category_zone category_zone__archives">
-    <h1 class="category_heading">
-      <span class="fa-stack category_icon-stack">
-        <i class="fa fa-circle-thin fa-stack-2x category_icon-wrapper"></i>
-        <i class="fa fa-folder fa-stack-1x category_icon"></i>
+  <div class="overview_zone overview_zone__archives">
+    <h1 class="overview_heading">
+      <span class="fa-stack overview_icon-stack">
+        <i class="fa fa-circle-thin fa-stack-2x overview_icon-wrapper"></i>
+        <i class="fa fa-folder fa-stack-1x overview_icon"></i>
       </span>
       <a href="">Archives</a>
     </h1>
 
     <ul>
-      <li class="category-archive">
-        <a class="category-archive_link" href="#">
-          <span class="category-archive_date">August</span>
-          <span class="category-archive_count">11</span>
+      <li class="overview-archive">
+        <a class="overview-archive_link" href="#">
+          <span class="overview-archive_date">August</span>
+          <span class="overview-archive_count">11</span>
         </a>
       </li>
-      <li class="category-archive">
-        <a class="category-archive_link" href="#">
-          <span class="category-archive_date">July</span>
-          <span class="category-archive_count">121</span>
+      <li class="overview-archive">
+        <a class="overview-archive_link" href="#">
+          <span class="overview-archive_date">July</span>
+          <span class="overview-archive_count">121</span>
         </a>
       </li>
-      <li class="category-archive">
-        <a class="category-archive_link" href="#">
-          <span class="category-archive_date">2015</span>
-          <span class="category-archive_count">181</span>
+      <li class="overview-archive">
+        <a class="overview-archive_link" href="#">
+          <span class="overview-archive_date">2015</span>
+          <span class="overview-archive_count">181</span>
         </a>
       </li>
     </ul>
