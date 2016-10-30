@@ -157,13 +157,22 @@ $category-list-mr: 30px;
   }
 }
 
+.category-categories {
+
+}
+
+.category-tags {
+
+}
+
 .category-archive {
-  a {
+  &_link {
     display: block;
     margin: 10px 15px;
     padding: .3em 1.2em;
     @include background-color('primary-bc-darken');
     @include color('secondary-fc');
+    @extend %font-color-transition;
 
     &:hover {
       @include background-color('primary-bc-lighten');
