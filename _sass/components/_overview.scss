@@ -52,7 +52,7 @@ $overview-link-mlr: get-right-value($overview-list-margin) / 2;
     border-left-style: solid;
     border-left-width: 1px;
 
-    &__with-time-line {
+    #{glue-class-modifier('__with-time-line')} {
       @include border-left-color('secondary-fc-darken');
     }
   } @else if $type == 'entry' {
@@ -103,16 +103,16 @@ $overview-link-mlr: get-right-value($overview-list-margin) / 2;
   &_zone {
     margin: $overview-margin;
 
-    &#{&}__latest-articles {
+    #{glue-class-modifier('__latest-articles')} {
     }
 
-    &#{&}__categories {
+    #{glue-class-modifier('__categories')} {
     }
 
-    &#{&}__tags {
+    #{glue-class-modifier('__tags')} {
     }
 
-    &#{&}__archives {
+    #{glue-class-modifier('__archives')} {
     }
   }
 
