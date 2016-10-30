@@ -3,10 +3,10 @@ $overview-list-pl: 25px;
 $overview-list-ml: 35px;
 $overview-list-mr: 30px;
 
-%font-color-transition {
+@mixin font-color-transition {
   transition : color .2s ease-in;
 }
-%border-color-transition {
+@mixin border-color-transition {
   transition : border-color .4s ease-in;
 }
 
@@ -102,7 +102,7 @@ $overview-list-mr: 30px;
 
   &_title {
     @include color('primary-fc');
-    @extend %font-color-transition;
+    @include font-color-transition;
   }
   &:hover &_title {
     @include color('active-fc');
@@ -111,7 +111,7 @@ $overview-list-mr: 30px;
   &_excerpt {
     @include color('secondary-fc');
     margin-bottom: .3em;
-    @extend %font-color-transition;
+    @include font-color-transition;
   }
   &:hover &_excerpt {
     @include color('primary-fc');
@@ -122,10 +122,10 @@ $overview-list-mr: 30px;
     font-style: italic;
 
     & &-date {
-      @extend %font-color-transition;
+      @include font-color-transition;
     }
     & &-comments {
-      @extend %font-color-transition;
+      @include font-color-transition;
     }
   }
   &:hover &_meta {
@@ -149,7 +149,7 @@ $overview-list-mr: 30px;
     border-style: solid;
     border-width: 1px;
     border-radius: 1em;
-    @extend %border-color-transition;
+    @include border-color-transition;
 
     &:hover {
       @include border-color('primary-fc');
@@ -172,7 +172,7 @@ $overview-list-mr: 30px;
     padding: .3em 1.2em;
     @include background-color('primary-bc-darken');
     @include color('secondary-fc');
-    @extend %font-color-transition;
+    @include font-color-transition;
 
     &:hover {
       @include background-color('primary-bc-lighten');
