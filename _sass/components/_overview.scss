@@ -123,22 +123,26 @@ $overview-link-mlr: get-right-value($overview-list-margin) / 2;
       font-size: .75em;
       @include background-color('primary-bc');
 
-      a:visited > & {
-        @include color('visited-fc');
-      }
-    }
+.overview .overview-icon {
+  position: absolute;
+  left: -1em;
+  font-size: .75em;
+  @include background-color('primary-bc');
+  color: inherit;
 
-    &-stack &-wrapper {
-      @include color('secondary-fc-darken');
-    }
-
-    &-stack & {
-    }
+  @at-root #{prepend-selector('a >')} {
+    @include color('secondary-fc-darken');
   }
 
-  &_heading {
-    @include item-container('heading');
-    @include color('active-fc');
+  @at-root #{prepend-selector('a:visited >')} {
+    @include color('visited-fc');
+  }
+
+  &_wrapper {
+    @include color('secondary-fc-darken');
+  }
+
+  &_itselft {
   }
 }
 
