@@ -1,9 +1,14 @@
-$overview-mtb: 20px;
-$overview-list-pl: 30px;
-$overview-list-ml: 36px;
-$overview-list-mr: 20px;
-$overview-link-mtb: 10px;
-$overview-link-mlr: get-right-value($overview-list-margin) / 2;
+$overview-margin: 0 0 20px 0;
+$overview-padding: 10px 0 25px 0;
+$overview-zone-margin: 15px 0 15px 0;
+// 1px padding-bottom for avoiding margin collapsing
+$overview-list-padding: 0 0 1px 30px;
+$overview-list-margin: 0 20px 0 36px;
+$overview-link-bar-padding: 5px 20px 5px 20px;
+$overview-link-bar-margin: 0 get-right-value($overview-list-margin) 10px get-left-value($overview-list-margin);
+$overview-link-tag-padding: list-scale($overview-link-bar-padding, .5);
+$overview-link-tag-margin: 0 5px 5px 0;
+
 
 @mixin font-color-transition {
   transition : color .2s ease-in;
@@ -15,6 +20,7 @@ $overview-link-mlr: get-right-value($overview-list-margin) / 2;
 %overview-base {
   width: 100%;
   height: 100%;
+  padding: $overview-padding;
   font-size: 1rem;
   overflow-y: auto;
   @include color('primary-fc');
@@ -68,8 +74,8 @@ $overview-link-mlr: get-right-value($overview-list-margin) / 2;
 @mixin item-link ($type) {
   @if $type == 'bar' {
     display: block;
-    padding: .3em 1.2em;
-    margin: $overview-link-mtb $overview-link-mlr;
+    padding: $overview-link-bar-padding;
+    margin: $overview-link-bar-margin;
     @include background-color('primary-bc-darken');
     @include color('secondary-fc');
     @include font-color-transition;
@@ -78,11 +84,10 @@ $overview-link-mlr: get-right-value($overview-list-margin) / 2;
       @include background-color('primary-bc-lighten');
       @include color('primary-fc');
     }
-  }
-  @if $type == 'tag' {
+  } @else if $type == 'tag' {
     display: inline-block;
-    padding: .2em .5em;
-    margin: $overview-link-mtb/2 $overview-link-mlr/2;
+    padding: $overview-link-tag-padding;
+    margin: $overview-link-tag-margin;
     border-style: solid;
     border-width: 1px;
     border-radius: 5px;
@@ -94,6 +99,8 @@ $overview-link-mlr: get-right-value($overview-list-margin) / 2;
       @include background-color('primary-bc-lighten');
       @include color('primary-fc');
     }
+  } @else {
+    @warn 'Link type \'#{$type}\' didn\'t define.';
   }
 }
 
@@ -101,7 +108,7 @@ $overview-link-mlr: get-right-value($overview-list-margin) / 2;
   @extend %overview-base;
 
   &_zone {
-    margin: $overview-margin;
+    margin: $overview-zone-margin;
 
     #{glue-class-modifier('__latest-articles')} {
     }
@@ -116,19 +123,17 @@ $overview-link-mlr: get-right-value($overview-list-margin) / 2;
     }
   }
 
-  &_icon {
-    &-stack {
-      position: absolute;
-      left: -1em;
-      font-size: .75em;
-      @include background-color('primary-bc');
+  &_heading {
+    @include item-container('heading');
+    @include color('active-fc');
+  }
+}
 
 .overview .overview-icon {
   position: absolute;
   left: -1em;
   font-size: .75em;
   @include background-color('primary-bc');
-  color: inherit;
 
   @at-root #{prepend-selector('a >')} {
     @include color('secondary-fc-darken');
@@ -187,12 +192,13 @@ $overview-link-mlr: get-right-value($overview-list-margin) / 2;
   }
 
   &_view-more-articles {
-    margin: get-top-value($overview-margin) 0;
+    margin: $overview-zone-margin;
     text-align: center;
     font-size: .875em;
   }
 
   &_btn {
+    display: inline-block;
     padding: .5em 1em;
     @include border-color('secondary-fc-darken');
     border-style: solid;
