@@ -58,23 +58,58 @@
   }
 }
 
-@function get-scaled-values ($list, $scale) {
-  $ret: null;
+@function list-scale ($list, $scale) {
+  $new-list: null;
   @each $val in $list {
-    $ret: append($ret, round($val * $scale));
+    $new-list: append($new-list, round($val * $scale));
   }
-  @return $ret;
+  @return $new-list;
+}
+
+@function list-join ($list, $separator: ' ') {
+  $str: '';
+  @each $item in $list {
+    $str: $str + $item + $separator;
+  }
+  @return str-slice($str, 1, -(str-length($separator) + 1));
+}
+
+@function str-trim ($string) {
+  @while str-slice($string, -1, -1) == ' ' {
+    @if str-length($string) > 1 {
+      $string: str-slice($string, 1, -2);
+    } @else {
+      $string: '';
+    }
+  }
+  @return $string;
 }
 
 @function get-last-selector ($selector: null) {
   @if $selector == null {
     $selector: '' + &;
   }
+  $selector: str-trim($selector);
   $len: str-length($selector);
   @for $n from $len - 1 through 1 {
     $segment: str-slice($selector, $n, $len);
     @if str-index($segment, ' ') == 1 {
       @return str-slice($segment, 2);
+    }
+  }
+  @return $selector;
+}
+
+@function get-initial-selectors ($selector: null) {
+  @if $selector == null {
+    $selector: '' + &;
+  }
+  $selector: str-trim($selector);
+  $len: str-length($selector);
+  @for $n from $len through 2 {
+    $segment: str-slice($selector, 1, $n);
+    @if str-slice($segment, $n, $n) == ' ' {
+      @return str-trim(str-slice($segment, 1, $n - 1));
     }
   }
   @return $selector;
@@ -103,4 +138,10 @@
   } @else {
     @error 'Expect the last selector \'#{$last-selector}\' is a class selector.'
   }
+}
+
+@function prepend-selector ($selector) {
+  $initial-selectors: get-initial-selectors('' + &);
+  $last-selector: get-last-selector('' + &);
+  @return list-join(($initial-selectors, $selector, $last-selector), ' ');
 }
