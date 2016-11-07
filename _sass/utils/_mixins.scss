@@ -1,3 +1,14 @@
+@mixin clearfix() {
+  &:before,
+  &:after {
+    content: "";
+    display: table;
+  }
+  &:after {
+    clear: both;
+  }
+}
+
 @mixin clearstyle-list {
   ul, ol {
     list-style-type: none;
