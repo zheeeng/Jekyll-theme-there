@@ -1,11 +1,32 @@
 <div class="overview">
 
+  <div class="overview_zone">
+    <h1 class="overview_category-heading">
+      <a class="overview_category-switcher" href="#">Blog</a>
+    </h1>
+    <h2 class="overview_category-sub-heading">
+      <a class="overview_category-switcher" href="#">Music</a>
+    </h2>
+  </div>
+
+  <div class="overview_zone overview_zone__search-articles">
+
+  <h1 class="overview_heading">
+    <span class="fa-stack overview-icon">
+      <i class="fa fa-circle-thin fa-stack-2x overview-icon_wrapper"></i>
+      <i class="fa fa-search fa-stack-1x overview-icon_itself"></i>
+    </span>
+    <a href="">Search Articles...</a>
+  </h1>
+
+  </div>
+
   <div class="overview_zone overview_zone__latest-articles">
 
     <h1 class="overview_heading overview_heading__with-time-line">
-      <span class="fa-stack overview_icon-stack">
-        <i class="fa fa-circle-thin fa-stack-2x overview_icon-wrapper"></i>
-        <i class="fa fa-bars fa-stack-1x overview_icon"></i>
+      <span class="fa-stack overview-icon">
+        <i class="fa fa-circle-thin fa-stack-2x overview-icon_wrapper"></i>
+        <i class="fa fa-bars fa-stack-1x overview-icon_itself"></i>
       </span>
       <a href="#">Latest Articles</a>
     </h1>
@@ -15,9 +36,9 @@
       <li class="overview-post overview-post__with-time-line">
         <h2 class="overview-post_title">
           <a href="{{ post.url | prepend: site.baseurl }}">
-            <span class="fa-stack overview_icon-stack">
-              <i class="fa fa-circle-thin fa-stack-2x overview_icon-wrapper"></i>
-              <i class="fa fa-circle fa-stack-1x overview_icon"></i>
+            <span class="fa-stack overview-icon">
+              <i class="fa fa-circle-thin fa-stack-2x overview-icon_wrapper"></i>
+              <i class="fa fa-circle fa-stack-1x overview-icon_itself"></i>
             </span>
             {{ post.title }}
           </a>
@@ -46,10 +67,11 @@
   </div>
 
   <div class="overview_zone overview_zone__categories">
+
     <h1 class="overview_heading">
-      <span class="fa-stack overview_icon-stack">
-        <i class="fa fa-circle-thin fa-stack-2x overview_icon-wrapper"></i>
-        <i class="fa fa-book fa-stack-1x overview_icon"></i>
+      <span class="fa-stack overview-icon">
+        <i class="fa fa-circle-thin fa-stack-2x overview-icon_wrapper"></i>
+        <i class="fa fa-book fa-stack-1x overview-icon_itself"></i>
       </span>
       <a href="">Categories</a>
     </h1>
@@ -71,23 +93,90 @@
         </a>
       </li>
     </ul>
+
   </div>
 
   <div class="overview_zone overview_zone__tags">
+
     <h1 class="overview_heading">
-      <span class="fa-stack overview_icon-stack">
-        <i class="fa fa-circle-thin fa-stack-2x overview_icon-wrapper"></i>
-        <i class="fa fa-tags fa-stack-1x overview_icon"></i>
+      <span class="fa-stack overview-icon">
+        <i class="fa fa-circle-thin fa-stack-2x overview-icon_wrapper"></i>
+        <i class="fa fa-tags fa-flip-vertical fa-stack-1x overview-icon_itself"></i>
       </span>
       <a href="">Tags</a>
     </h1>
+
+    <ul class="overview-tags_container">
+      <li class="overview-tags">
+        <a class="overview-tags_link" href="#">
+          <i class="fa fa-tag fa-flip-vertical">&nbsp;</i>
+          <span class="overview-tags_name">Jekyll (4)</span>
+        </a>
+      </li>
+      <li class="overview-tags">
+        <a class="overview-tags_link" href="#">
+          <i class="fa fa-tag fa-flip-vertical">&nbsp;</i>
+          <span class="overview-tags_name">Linux (7)</span>
+        </a>
+      </li>
+      <li class="overview-tags">
+        <a class="overview-tags_link" href="#">
+          <i class="fa fa-tag fa-flip-vertical">&nbsp;</i>
+          <span class="overview-tags_name">Apache (2)</span>
+        </a>
+      </li>
+      <li class="overview-tags">
+        <a class="overview-tags_link" href="#">
+          <i class="fa fa-tag fa-flip-vertical">&nbsp;</i>
+          <span class="overview-tags_name">Node.js (3)</span>
+        </a>
+      </li>
+      <li class="overview-tags">
+        <a class="overview-tags_link" href="#">
+          <i class="fa fa-tag fa-flip-vertical">&nbsp;</i>
+          <span class="overview-tags_name">Angular.js (4)</span>
+        </a>
+      </li>
+      <li class="overview-tags">
+        <a class="overview-tags_link" href="#">
+          <i class="fa fa-tag fa-flip-vertical">&nbsp;</i>
+          <span class="overview-tags_name">JS (21)</span>
+        </a>
+      </li>
+      <li class="overview-tags">
+        <a class="overview-tags_link" href="#">
+          <i class="fa fa-tag fa-flip-vertical">&nbsp;</i>
+          <span class="overview-tags_name">Go (11)</span>
+        </a>
+      </li>
+      <li class="overview-tags">
+        <a class="overview-tags_link" href="#">
+          <i class="fa fa-tag fa-flip-vertical">&nbsp;</i>
+          <span class="overview-tags_name">PHP (13)</span>
+        </a>
+      </li>
+      <li class="overview-tags">
+        <a class="overview-tags_link" href="#">
+          <i class="fa fa-tag fa-flip-vertical">&nbsp;</i>
+          <span class="overview-tags_name">Apple (1)</span>
+        </a>
+      </li>
+      <li class="overview-tags">
+        <a class="overview-tags_link" href="#">
+          <i class="fa fa-tag fa-flip-vertical">&nbsp;</i>
+          <span class="overview-tags_name">Design (19)</span>
+        </a>
+      </li>
+    </ul>
+
   </div>
 
   <div class="overview_zone overview_zone__archives">
+
     <h1 class="overview_heading">
-      <span class="fa-stack overview_icon-stack">
-        <i class="fa fa-circle-thin fa-stack-2x overview_icon-wrapper"></i>
-        <i class="fa fa-folder fa-stack-1x overview_icon"></i>
+      <span class="fa-stack overview-icon">
+        <i class="fa fa-circle-thin fa-stack-2x overview-icon_wrapper"></i>
+        <i class="fa fa-archive fa-stack-1x overview-icon_itself"></i>
       </span>
       <a href="">Archives</a>
     </h1>

@@ -108,6 +108,7 @@ $overview-link-tag-margin: 0 5px 5px 0;
   @extend %overview-base;
 
   &_zone {
+    @include clearfix;
     margin: $overview-zone-margin;
 
     #{glue-class-modifier('__latest-articles')} {
@@ -126,6 +127,22 @@ $overview-link-tag-margin: 0 5px 5px 0;
   &_heading {
     @include item-container('heading');
     @include color('active-fc');
+  }
+
+  &_category-heading {
+    float: left;
+    @include item-container('heading');
+    @include color('active-fc');
+    font-size: 2em;
+    font-weight: 500;
+  }
+  &_category-sub-heading {
+    float: right;
+    @include item-container('heading');
+    @include color('active-fc');
+    font-size: 1em;
+    font-weight: 500;
+    font-style: italic;
   }
 }
 
