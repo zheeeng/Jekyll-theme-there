@@ -125,8 +125,23 @@ $overview-link-tag-margin: 0 5px 5px 0;
   &_topic-list {
     padding: $overview-topic-list-padding;
     margin: $overview-topic-list-margin;
+    padding-bottom: 10px;
+    margin-bottom: 10px;
     white-space: nowrap;
     overflow: hidden;
+    &::before {
+      // Simulate the style of .overview_topic-list-item > .overview_topic-list-heading for avoiding topic heading joggling in mobile device
+      display: inline-block;
+      content: 'Zheeeng';
+      padding: $overview-topic-heading-padding;
+      margin: $overview-topic-heading-margin;
+      font-size: 2em;
+      width: 0;
+      visibility: hidden;
+    }
+    &:hover {
+      overflow: auto;
+    }
   }
   &_topic-list-item {
     display: inline-block;
@@ -136,6 +151,7 @@ $overview-link-tag-margin: 0 5px 5px 0;
     font-size: 1.25em;
     @include color('heading-fc');
     font-style: italic;
+    vertical-align: bottom;
     padding: $overview-topic-heading-padding;
     margin: $overview-topic-heading-margin;
     @include transition-all-500;
@@ -143,6 +159,9 @@ $overview-link-tag-margin: 0 5px 5px 0;
       font-size: 2em;
       font-style: normal;
       margin: $overview-topic-heading-margin__leading;
+    }
+    &__home {
+      font-size: 2em;
     }
   }
   &_topic-heading:hover {
