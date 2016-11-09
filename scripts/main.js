@@ -1,5 +1,45 @@
 window.onload = function () {
-  (function initTopicPage () {
+  var shims = {
+    loopEventByFrame: null,
+    cancelLoopEventByFrame: null
+  }
+
+  ;(function (shims) {
+    // Reference: https://gist.github.com/paulirish/1579671
+    // MIT license
+    var lastTime = 0
+    var vendors = ['ms', 'moz', 'webkit', 'o']
+    var loop = window.requestAnimationFrame
+    var cancel = window.cancelAnimationFrame
+
+    for (var x = 0; x < vendors.length && !loop; ++x) {
+      loop = window[vendors[x] + 'RequestAnimationFrame']
+      cancel = window[vendors[x] + 'CancelAnimationFrame'] ||
+        window[vendors[x] + 'CancelRequestAnimationFrame']
+    }
+
+    if (!loop) {
+      loop = function (callback) {
+        var currTime = new Date().getTime()
+        var timeToCall = Math.max(0, 16 - (currTime - lastTime))
+        var id = window.setTimeout(function () { callback(currTime + timeToCall) }, timeToCall)
+        lastTime = currTime + timeToCall
+        return id
+      }
+    }
+
+    if (!cancel) {
+      cancel = window.clearTimeout
+    }
+
+    shims.loopEventByFrame = loop
+    shims.cancelLoopEventByFrame = cancel
+  })(shims)
+
+  // Pages initializing
+  ;(function initTopicPage (shims) {
+    var loopEventByFrame = shims.loopEventByFrame
+    var cancelLoopEventByFrame = shims.cancelLoopEventByFrame
     // For theme switching
     var classContainer = 'j-overview-topic-container'
     var classHeading = 'j-overview-topic-heading'
@@ -66,8 +106,8 @@ window.onload = function () {
           mouseOverRateX = mouseOverX < scrollReserveZoneWidth ? 0
             : mouseOverX > navClientWidth - scrollReserveZoneWidth ? 1
             : (mouseOverX - scrollReserveZoneWidth) / (navClientWidth - scrollReserveZoneWidth * 2)
-          cancelAnimationFrame(scrollFrameId)
-          scrollFrameId = requestAnimationFrame(function loop () {
+          cancelLoopEventByFrame(scrollFrameId)
+          scrollFrameId = loopEventByFrame(function loop () {
             if ($nav.scrollWidth <= navClientWidth) return
             navScrollMaxDistance = $nav.scrollWidth - navClientWidth
             navScrollLeft = $nav.scrollLeft
@@ -77,7 +117,7 @@ window.onload = function () {
               // Positive distance means $nav need to scroll toward right
               if (navScrollLeftTo * scrollSpeedFactor < navScrollLeftDistance) {
                 $nav.scrollLeft += navScrollLeftTo * scrollSpeedFactor
-                scrollFrameId = requestAnimationFrame(loop)
+                scrollFrameId = loopEventByFrame(loop)
               } else {
                 $nav.scrollLeft += navScrollLeftDistance
               }
@@ -95,5 +135,5 @@ window.onload = function () {
         })
       })
     }
-  })()
+  })(shims)
 }
