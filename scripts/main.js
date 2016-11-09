@@ -1,8 +1,23 @@
 window.onload = function () {
   var shims = {
+    addEvent: null,
     loopEventByFrame: null,
     cancelLoopEventByFrame: null
   }
+
+  ;(function (shims) {
+    shims.addEvent = (function () {
+      if (window.addEventListener) {
+        return function ($el, type, callback) {
+          $el.addEventListener(type, callback, false)
+        }
+      } else if (window.attachEvent) {
+        return function ($el, type, callback) {
+          $el.attachEvent('on' + type, callback)
+        }
+      }
+    })()
+  })(shims)
 
   ;(function (shims) {
     // Reference: https://gist.github.com/paulirish/1579671
@@ -38,6 +53,8 @@ window.onload = function () {
 
   // Pages initializing
   ;(function initTopicPage (shims) {
+    // Import shims
+    var addEvent = shims.addEvent
     var loopEventByFrame = shims.loopEventByFrame
     var cancelLoopEventByFrame = shims.cancelLoopEventByFrame
     // For theme switching
@@ -73,7 +90,7 @@ window.onload = function () {
     if ($topicContainers) {
       [].forEach.call($topicContainers, function ($container) {
         [].forEach.call($container.getElementsByClassName(classChangeAnchor), function ($anchor) {
-          $anchor.addEventListener('click', function (e) {
+          addEvent($anchor, 'click', function (e) {
             e.preventDefault()
             switchTheme($container, $anchor.getAttribute('data-theme'))
             ;[].forEach.call($container.getElementsByClassName(classHeading), function ($heading) {
@@ -101,7 +118,7 @@ window.onload = function () {
         // navScrollLeftDistance = navScrollLeftTo - navScrollLeft
         var navScrollMaxDistance, navScrollLeft, navScrollLeftTo, navScrollLeftDistance
 
-        $nav.addEventListener('mousemove', function (e) {
+        addEvent($nav, 'mousemove', function (e) {
           mouseOverX = e.pageX - (navRect.left - bodyRect.left)
           mouseOverRateX = mouseOverX < scrollReserveZoneWidth ? 0
             : mouseOverX > navClientWidth - scrollReserveZoneWidth ? 1
