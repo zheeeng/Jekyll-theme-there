@@ -8,7 +8,7 @@ window.onload = function () {
 
   ;(function (shims) {
     shims.forEach = (function () {
-      if (!Array.prototype.forEach) {
+      if (Array.prototype.forEach) {
         return function (arrayLikeList, callback, thisArg) {
           Array.prototype.forEach.call(arrayLikeList, callback, thisArg)
         }
