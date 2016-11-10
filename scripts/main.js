@@ -146,7 +146,7 @@ window.onload = function () {
         $selectedItem: null
       }
 
-      makeNavigationScrollable($nav)
+      makeNavigationScrollable.call(ctx, $nav)
       var $items = $nav.getElementsByClassName(classItem)
       if ($items) {
         // Only the first selected item counts
@@ -160,6 +160,11 @@ window.onload = function () {
 
     // Mouse moving on navigation zone scroll the topics into the navigation view zone
     function makeNavigationScrollable ($nav) {
+      var ctx = {
+        $container: this.$container,
+        $nav: this.$nav,
+        $selectedItem: this.$selectedItem
+      }
       var navRect = $nav.getBoundingClientRect()
       var navClientWidth = $nav.clientWidth
       var scrollFrameId
@@ -206,6 +211,13 @@ window.onload = function () {
         })
       })
       // Mouse leaving navigation set right the selected item
+      addEvent($nav, 'mouseleave', function (e) {
+        if (ctx.$selectedItem) {
+          $nav.scrollLeft = ctx.$selectedItem.offsetLeft - $nav.offsetLeft
+        } else {
+          $nav.scrollLeft = 0
+        }
+      })
     }
 
     // Make clicking on anchor switch the themes and assign the selected item to $selectedItem
