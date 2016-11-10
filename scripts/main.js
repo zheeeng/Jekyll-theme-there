@@ -1,7 +1,6 @@
 window.onload = function () {
   var shims = {
     forEach: null,
-    getClosestParentElementByClassName: null,
     addEvent: null,
     loopEventByFrame: null,
     cancelLoopEventByFrame: null
@@ -27,19 +26,6 @@ window.onload = function () {
         }
       }
     })()
-  })(shims)
-
-  ;(function (shims) {
-    shims.getClosestParentElementByClassName = function ($el, className) {
-      while ($el) {
-        if ($el.classList.contains(className)) {
-          return $el
-        } else {
-          $el = $el.parentElement
-        }
-      }
-      return null
-    }
   })(shims)
 
   ;(function (shims) {
