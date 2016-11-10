@@ -1,6 +1,8 @@
 window.onload = function () {
+  // Shims to be fulfilled
   var shims = {
     forEach: null,
+    filter: null,
     addEvent: null,
     loopEventByFrame: null,
     cancelLoopEventByFrame: null
@@ -10,7 +12,7 @@ window.onload = function () {
     shims.forEach = (function () {
       if (Array.prototype.forEach) {
         return function (arrayLikeList, callback, thisArg) {
-          Array.prototype.forEach.call(arrayLikeList, callback, thisArg)
+          return Array.prototype.forEach.call(arrayLikeList, callback, thisArg)
         }
       } else {
         return function (arrayLikeList, callback, thisArg) {
@@ -23,6 +25,31 @@ window.onload = function () {
             if (k in o) callback.call(thisArg, o[k], k, o)
             k++
           }
+          return void 0
+        }
+      }
+    })()
+  })(shims)
+
+  ;(function (shims) {
+    shims.filter = (function () {
+      if (Array.prototype.filter) {
+        return function (arrayLikeList, filter, thisArg) {
+          return Array.prototype.filter.call(arrayLikeList, filter, thisArg)
+        }
+      } else {
+        return function (arrayLikeList, filter, thisArg) {
+          if (arrayLikeList === null || arrayLikeList === void 0) throw new TypeError('parameter arrayLikeList is null or undefined')
+          if (typeof filter !== 'function') throw new TypeError('parameter filter is not a function')
+          var o = Object(arrayLikeList)
+          var len = o.length >>> 0
+          var res = []
+          var k = 0
+          while (k < len) {
+            if (k in o && filter.call(thisArg, o[k], k, o)) res.push(o[k])
+            k++
+          }
+          return res
         }
       }
     })()
@@ -78,6 +105,7 @@ window.onload = function () {
   ;(function initTopicPage (shims) {
     // Import shims
     var forEach = shims.forEach
+    var filter = shims.filter
     var addEvent = shims.addEvent
     var loopEventByFrame = shims.loopEventByFrame
     var cancelLoopEventByFrame = shims.cancelLoopEventByFrame
@@ -120,7 +148,14 @@ window.onload = function () {
 
       makeNavigationScrollable($nav)
       var $items = $nav.getElementsByClassName(classItem)
-      if ($items) forEach($items, processItem, ctx)
+      if ($items) {
+        // Only the first selected item counts
+        var $selectedItems = filter($items, function ($item) {
+          return $item.classList.contains(__itemSelected)
+        })
+        if ($selectedItems.length) ctx.$selectedItem = $selectedItems[0]
+        forEach($items, processItem, ctx)
+      }
     }
 
     // Mouse moving on navigation zone scroll the topics into the navigation view zone
