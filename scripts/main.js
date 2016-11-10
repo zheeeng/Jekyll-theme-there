@@ -17,7 +17,7 @@ window.onload = function () {
           if (arrayLikeList === null || arrayLikeList === void 0) throw new TypeError('parameter arrayLikeList is null or undefined')
           if (typeof callback !== 'function') throw new TypeError('parameter callback is not a function')
           var o = Object(arrayLikeList)
-          var len = o.length
+          var len = o.length >>> 0
           var k = 0
           while (k < len) {
             if (k in o) callback.call(thisArg, o[k], k, o)
