@@ -35,14 +35,25 @@ window.onload = function () {
       return local.__scope__[prop]
     }
 
+    function mutate (prop, value) {
+      var local = this
+      while (local.__scope__[prop] === void 0 && local.hasOwnProperty('__uber__')) {
+        local = local.__uber__
+      }
+      if (local.__scope__[prop] !== void 0) local.__scope__[prop] = value
+      else throw Error('No mutable prop ' + prop + ' in the scope chain!')
+    }
+
     if (Object.defineProperties) {
       Object.defineProperties(Scope.prototype, {
         'set': { value: set },
-        'get': { value: get }
+        'get': { value: get },
+        'mutate': { value: mutate }
       })
     } else {
       Scope.prototype.set = set
       Scope.prototype.get = get
+      Scope.prototype.mutate = mutate
     }
 
     shims.context = function (uberScope) {
