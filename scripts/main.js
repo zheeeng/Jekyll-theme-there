@@ -31,7 +31,7 @@ window.onload = function () {
 
     function get (prop) {
       var local = this
-      while (local.__scope__[prop] === void 0 && local.hasOwnProperty('__uber__')) {
+      while (!(prop in local.__scope__) && local.hasOwnProperty('__uber__')) {
         local = local.__uber__
       }
       return local.__scope__[prop]
@@ -39,11 +39,11 @@ window.onload = function () {
 
     function mutate (prop, value) {
       var local = this
-      while (local.__scope__[prop] === void 0 && local.hasOwnProperty('__uber__')) {
+      while (!(prop in local.__scope__) && local.hasOwnProperty('__uber__')) {
         local = local.__uber__
       }
-      if (local.__scope__[prop] !== void 0) local.__scope__[prop] = value
-      else throw Error('No mutable prop ' + prop + ' in the scope chain!')
+      if (prop in local.__scope__) local.__scope__[prop] = value
+      else throw Error('No mutable prop ' + prop + ' in the scope chain')
     }
 
     if (Object.defineProperties) {
@@ -63,21 +63,22 @@ window.onload = function () {
     }
   })(shims)
 
+  // shims.forEach
   ;(function (shims) {
     shims.forEach = (function () {
       if (Array.prototype.forEach) {
-        return function (arrayLikeList, callback, thisArg) {
-          return Array.prototype.forEach.call(arrayLikeList, callback, thisArg)
+        return function (arrayLikeList, fn, thisArg) {
+          return Array.prototype.forEach.call(arrayLikeList, fn, thisArg)
         }
       } else {
-        return function (arrayLikeList, callback, thisArg) {
-          if (arrayLikeList === null || arrayLikeList === void 0) throw new TypeError('parameter arrayLikeList is null or undefined')
-          if (typeof callback !== 'function') throw new TypeError('parameter callback is not a function')
+        return function (arrayLikeList, fn, thisArg) {
+          if (arrayLikeList === null || arrayLikeList === void 0) throw new TypeError('Parameter arrayLikeList is null or undefined')
+          if (typeof fn !== 'function') throw new TypeError('Parameter fn is not a function')
           var o = Object(arrayLikeList)
           var len = o.length >>> 0
           var k = 0
           while (k < len) {
-            if (k in o) callback.call(thisArg, o[k], k, o)
+            if (k in o) fn.call(thisArg, o[k], k, o)
             k++
           }
           return void 0
@@ -86,6 +87,7 @@ window.onload = function () {
     })()
   })(shims)
 
+  // shims.filter
   ;(function (shims) {
     shims.filter = (function () {
       if (Array.prototype.filter) {
@@ -94,8 +96,8 @@ window.onload = function () {
         }
       } else {
         return function (arrayLikeList, filter, thisArg) {
-          if (arrayLikeList === null || arrayLikeList === void 0) throw new TypeError('parameter arrayLikeList is null or undefined')
-          if (typeof filter !== 'function') throw new TypeError('parameter filter is not a function')
+          if (arrayLikeList === null || arrayLikeList === void 0) throw new TypeError('Parameter arrayLikeList is null or undefined')
+          if (typeof filter !== 'function') throw new TypeError('Parameter filter is not a function')
           var o = Object(arrayLikeList)
           var len = o.length >>> 0
           var res = []
@@ -110,6 +112,7 @@ window.onload = function () {
     })()
   })(shims)
 
+  // shims.addEvent
   ;(function (shims) {
     shims.addEvent = (function () {
       if (window.addEventListener) {
@@ -124,6 +127,7 @@ window.onload = function () {
     })()
   })(shims)
 
+  // shims.loopEventByFrame, shims.cancelLoopEventByFrame
   ;(function (shims) {
     // Reference: https://gist.github.com/paulirish/1579671
     // MIT license
@@ -140,11 +144,11 @@ window.onload = function () {
 
     if (!loop) {
       loop = function (callback) {
-        var currTime = new Date().getTime()
-        var timeToCall = Math.max(0, 16 - (currTime - lastTime))
-        var id = window.setTimeout(function () { callback(currTime + timeToCall) }, timeToCall)
-        lastTime = currTime + timeToCall
-        return id
+        var currentTime = new Date().getTime()
+        var timeToCall = Math.max(0, 16 - (currentTime - lastTime))
+        var timer = window.setTimeout(function () { callback(currentTime + timeToCall) }, timeToCall)
+        lastTime = currentTime + timeToCall
+        return timer
       }
     }
 
