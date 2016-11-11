@@ -169,7 +169,7 @@ window.onload = function () {
     var classChangeAnchor = 'j-overview-topic-change'
     var __itemSelected = 'overview_topic-item__selected'
     // For navigation auto scrolling
-    // Variable scrollReservZoneWidth define the width of the reserve zone on where the mousemove event take no effect. The reserve zone locate in the beginning and the end of the scroll mapping zone. The scrollSpeedFactor control the speed of scrolling
+    // Variable scrollReservZoneWidth define the width of the reserve zone on where the mouse moving event take no effect. The reserve zone locate in the beginning and the end of the scroll mapping zone. The scrollSpeedFactor control the speed of scrolling
     var classNavScrollZone = 'j-overview-topic-nav'
     var scrollReserveZoneWidth = 40
     var scrollSpeedFactor = 0.2
@@ -187,30 +187,35 @@ window.onload = function () {
     function processContainer ($container, index, $containers) {
       var ctx = this
       ctx.set('$container', $container)
+      // Process the $navs under the $container
       var $navs = $container.getElementsByClassName(classNavScrollZone)
       if ($navs) forEach($navs, processNavigation, context(ctx))
     }
 
-    // process switch themes and assign the selected item to $selectedItem, it require passing the $container to be themed
     function processNavigation ($nav) {
       var ctx = this
       ctx.set('$nav', $nav)
       ctx.set('$selectedItem', null)
 
-      makeNavigationScrollable.call(context(ctx), $nav)
+      // Add mouse moving and mouse leaving events on the $nav
+      addMouseEventsOnNavigation.call(context(ctx), $nav)
+
+      // Add clicking events on $items (on their $anchors in actually)
       var $items = $nav.getElementsByClassName(classItem)
       if ($items) {
-        // Only the first selected item counts
+        // Assign the initial selected item to the variable $selectedItem, only the first selected item counts
         var $selectedItems = filter($items, function ($item) {
           return $item.classList.contains(__itemSelected)
         })
         if ($selectedItems.length) ctx.mutate('$selectedItem', $selectedItems[0])
+        // Process the $items under the $nav
         forEach($items, processItem, context(ctx))
       }
     }
 
-    // Mouse moving on navigation zone scroll the topics into the navigation view zone
-    function makeNavigationScrollable ($nav) {
+    // 1. Mouse moving event on navigation scroll the navigation bar
+    // 2. Mouse leaving event on navigation scroll the selected heading into view
+    function addMouseEventsOnNavigation ($nav) {
       var ctx = this
       var navRect = $nav.getBoundingClientRect()
       var navClientWidth = $nav.clientWidth
@@ -225,7 +230,7 @@ window.onload = function () {
       var navScrollMaxDistance, navScrollLeft, navScrollLeftTo, navScrollLeftDistance
       var $selectedItem
 
-      // Mouse moving event trigger navigation scrolling
+      // Mouse moving on the navigation zone scroll the headings into the navigation view zone
       addEvent($nav, 'mousemove', function (e) {
         mouseOverX = e.pageX - (navRect.left - bodyRect.left)
         mouseOverRateX = mouseOverX < scrollReserveZoneWidth ? 0
@@ -239,7 +244,7 @@ window.onload = function () {
           navScrollLeftTo = navScrollMaxDistance * mouseOverRateX
           navScrollLeftDistance = navScrollLeftTo - navScrollLeft
           if (navScrollLeftDistance > 0) {
-            // Positive distance means $nav need to scroll toward right
+            // Positive distance means the $nav need to scroll toward right
             if (navScrollLeftTo * scrollSpeedFactor < navScrollLeftDistance) {
               $nav.scrollLeft += navScrollLeftTo * scrollSpeedFactor
               scrollFrameId = loopEventByFrame(loop)
@@ -248,7 +253,7 @@ window.onload = function () {
             }
           } else if (navScrollLeftDistance < 0) {
             navScrollLeftDistance = -navScrollLeftDistance
-            // Negative distance means $nav need to scroll toward left
+            // Negative distance means the $nav need to scroll toward left
             if ((navScrollMaxDistance - navScrollLeftTo) * scrollSpeedFactor < navScrollLeftDistance) {
               $nav.scrollLeft -= (navScrollMaxDistance - navScrollLeftTo) * scrollSpeedFactor
               scrollFrameId = requestAnimationFrame(loop)
@@ -269,14 +274,15 @@ window.onload = function () {
       })
     }
 
-    // Make clicking on anchor switch the themes and assign the selected item to $selectedItem
+    // 1. Process switching themes, it require the execution context contains the $container which to be themed
+    // 2. and assign the selected item to the variable $selectedItem which reference to the $selectedItem in the execution context
     function processItem ($item, index, $items) {
       var ctx = this
       ctx.set('$item', $item)
 
       var $container = ctx.get('$container')
 
-      // Must the first anchor works on clicking
+      // Must the first anchor works on clicking event
       var $anchors = $item.getElementsByClassName(classChangeAnchor)
       var $anchor = $anchors ? $anchors[0] : null
 
@@ -293,7 +299,7 @@ window.onload = function () {
       }
     }
 
-    // Clicking topic change anchor switch the theme mounted on the topic container
+    // Initialization entry
     var $containers = document.getElementsByClassName(classContainer)
     if ($containers) {
       forEach($containers, processContainer, context({}))
