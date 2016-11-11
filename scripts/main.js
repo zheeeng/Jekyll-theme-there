@@ -1,12 +1,54 @@
 window.onload = function () {
   // Shims to be fulfilled
   var shims = {
+    context: null,
     forEach: null,
     filter: null,
     addEvent: null,
     loopEventByFrame: null,
     cancelLoopEventByFrame: null
   }
+
+  ;(function (shims) {
+    function Scope (uberScope) {
+      if (typeof uberScope !== 'object' || uberScope === null) throw TypeError('The uberScope isn\'t a object')
+      if (Object.defineProperties) {
+        Object.defineProperties(this, {
+          '__uber__': { value: uberScope },
+          '__scope__': { value: {} }
+        })
+      } else {
+        this.__uber__ = uberScope
+        this.__scope__ = {}
+      }
+    }
+
+    function set (prop, value) {
+      this.__scope__[prop] = value
+    }
+
+    function get (prop) {
+      var local = this
+      while (local.__scope__[prop] === void 0 && local.hasOwnProperty('__uber__')) {
+        local = local.__uber__
+      }
+      return local.__scope__[prop]
+    }
+
+    if (Object.defineProperties) {
+      Object.defineProperties(Scope.prototype, {
+        'set': { value: set },
+        'get': { value: get }
+      })
+    } else {
+      Scope.prototype.set = set
+      Scope.prototype.get = get
+    }
+
+    shims.context = function (uberScope) {
+      return new Scope(uberScope)
+    }
+  })(shims)
 
   ;(function (shims) {
     shims.forEach = (function () {
