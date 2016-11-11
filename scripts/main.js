@@ -157,6 +157,7 @@ window.onload = function () {
   // Pages initializing
   ;(function initTopicPage (shims) {
     // Import shims
+    var context = shims.context
     var forEach = shims.forEach
     var filter = shims.filter
     var addEvent = shims.addEvent
@@ -184,40 +185,33 @@ window.onload = function () {
 
     // Decoupled processors
     function processContainer ($container, index, $containers) {
-      var ctx = {
-        $container: $container
-      }
+      var ctx = this
+      ctx.set('$container', $container)
       var $navs = $container.getElementsByClassName(classNavScrollZone)
-      if ($navs) forEach($navs, processNavigation, ctx)
+      if ($navs) forEach($navs, processNavigation, context(ctx))
     }
 
     // process switch themes and assign the selected item to $selectedItem, it require passing the $container to be themed
     function processNavigation ($nav) {
-      var ctx = {
-        $container: this.$container,
-        $nav: $nav,
-        $selectedItem: null
-      }
+      var ctx = this
+      ctx.set('$nav', $nav)
+      ctx.set('$selectedItem', null)
 
-      makeNavigationScrollable.call(ctx, $nav)
+      makeNavigationScrollable.call(context(ctx), $nav)
       var $items = $nav.getElementsByClassName(classItem)
       if ($items) {
         // Only the first selected item counts
         var $selectedItems = filter($items, function ($item) {
           return $item.classList.contains(__itemSelected)
         })
-        if ($selectedItems.length) ctx.$selectedItem = $selectedItems[0]
-        forEach($items, processItem, ctx)
+        if ($selectedItems.length) ctx.mutate('$selectedItem', $selectedItems[0])
+        forEach($items, processItem, context(ctx))
       }
     }
 
     // Mouse moving on navigation zone scroll the topics into the navigation view zone
     function makeNavigationScrollable ($nav) {
-      var ctx = {
-        $container: this.$container,
-        $nav: this.$nav,
-        $selectedItem: this.$selectedItem
-      }
+      var ctx = this
       var navRect = $nav.getBoundingClientRect()
       var navClientWidth = $nav.clientWidth
       var scrollFrameId
@@ -229,6 +223,7 @@ window.onload = function () {
       // navScrollLeftTo = map the variable mouseOverX in $nav.clientWidth (exclude the reserve zone, I employee the variable mouseOverRateX) to the distance X of navScrollMaxDistance in real time
       // navScrollLeftDistance = navScrollLeftTo - navScrollLeft
       var navScrollMaxDistance, navScrollLeft, navScrollLeftTo, navScrollLeftDistance
+      var $selectedItem
 
       // Mouse moving event trigger navigation scrolling
       addEvent($nav, 'mousemove', function (e) {
@@ -265,8 +260,9 @@ window.onload = function () {
       })
       // Mouse leaving navigation set right the selected item
       addEvent($nav, 'mouseleave', function (e) {
-        if (ctx.$selectedItem) {
-          $nav.scrollLeft = ctx.$selectedItem.offsetLeft - $nav.offsetLeft
+        $selectedItem = ctx.get('$selectedItem')
+        if ($selectedItem) {
+          $nav.scrollLeft = $selectedItem.offsetLeft - $nav.offsetLeft
         } else {
           $nav.scrollLeft = 0
         }
@@ -275,12 +271,10 @@ window.onload = function () {
 
     // Make clicking on anchor switch the themes and assign the selected item to $selectedItem
     function processItem ($item, index, $items) {
-      var ctx = {
-        $container: this.$container,
-        $nav: this.$nav,
-        $selectedItem: this.$selectedItem,
-        $item: $item
-      }
+      var ctx = this
+      ctx.set('$item', $item)
+
+      var $container = ctx.get('$container')
 
       // Must the first anchor works on clicking
       var $anchors = $item.getElementsByClassName(classChangeAnchor)
@@ -289,12 +283,12 @@ window.onload = function () {
       if ($anchor) {
         addEvent($anchor, 'click', function (e) {
           e.preventDefault()
-          switchTheme(ctx.$container, $anchor.getAttribute('data-theme'))
+          switchTheme($container, $anchor.getAttribute('data-theme'))
           forEach($items, function ($item) {
             $item.classList.remove(__itemSelected)
           })
           $item.classList.add(__itemSelected)
-          ctx.$selectedItem = $item
+          ctx.mutate('$selectedItem', $item)
         })
       }
     }
@@ -302,7 +296,7 @@ window.onload = function () {
     // Clicking topic change anchor switch the theme mounted on the topic container
     var $containers = document.getElementsByClassName(classContainer)
     if ($containers) {
-      forEach($containers, processContainer)
+      forEach($containers, processContainer, context({}))
     }
   })(shims)
 }
