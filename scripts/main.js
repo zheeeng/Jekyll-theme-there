@@ -6,9 +6,11 @@ window.onload = function () {
     filter: null,
     addEvent: null,
     loopEventByFrame: null,
-    cancelLoopEventByFrame: null
+    cancelLoopEventByFrame: null,
+    throttle: null
   }
 
+  // shims.context
   ;(function (shims) {
     function Scope (uberScope) {
       if (typeof uberScope !== 'object' || uberScope === null) throw TypeError('The uberScope isn\'t a object')
@@ -154,6 +156,26 @@ window.onload = function () {
     shims.cancelLoopEventByFrame = cancel
   })(shims)
 
+  ;(function (shims) {
+    shims.throttle = function (fn, threshhold, ctx) {
+      if (typeof fn !== 'function') throw new TypeError('Parameter fn is not a function')
+      if (threshhold === void 0) threshhold = 250
+      var lastTime = 0
+      var timer
+      return function () {
+        if (ctx === void 0) ctx = this
+        var currentTime = +new Date()
+        var args = arguments
+        var timeToCall = Math.max(0, threshhold - (currentTime - lastTime))
+        window.clearTimeout(timer)
+        timer = window.setTimeout(function () {
+          fn.apply(ctx, args)
+          lastTime = currentTime + timeToCall
+        }, timeToCall)
+      }
+    }
+  })(shims)
+
   // Pages initializing
   ;(function initTopicPage (shims) {
     // Import shims
@@ -163,6 +185,7 @@ window.onload = function () {
     var addEvent = shims.addEvent
     var loopEventByFrame = shims.loopEventByFrame
     var cancelLoopEventByFrame = shims.cancelLoopEventByFrame
+    var throttle = shims.throttle
     // HTML element class hooks
     var classContainer = 'j-overview-topic-container'
     var classItem = 'j-overview-topic-item'
@@ -253,7 +276,7 @@ window.onload = function () {
       }
 
       // Mouse moving on the navigation zone scroll the headings into the navigation view zone
-      addEvent($nav, 'mousemove', function (e) {
+      addEvent($nav, 'mousemove', throttle(function (e) {
         mouseOverX = e.pageX - (navRect.left - bodyRect.left)
         mouseOverRateX = mouseOverX < scrollReserveZoneWidth ? 0
           : mouseOverX > navClientWidth - scrollReserveZoneWidth ? 1
@@ -267,7 +290,7 @@ window.onload = function () {
           navScrollLeftDistance = navScrollLeftTo - navScrollLeft
           scroll(loop)
         })
-      })
+      }, 60))
       // Mouse leaving navigation set right the selected item
       addEvent($nav, 'mouseleave', function (e) {
         $selectedItem = ctx.get('$selectedItem')
