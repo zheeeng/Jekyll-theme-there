@@ -7,7 +7,8 @@ window.onload = function () {
     addEvent: null,
     loopEventByFrame: null,
     cancelLoopEventByFrame: null,
-    throttle: null
+    throttle: null,
+    debounce: null
   }
 
   // shims.context
@@ -160,6 +161,7 @@ window.onload = function () {
     shims.cancelLoopEventByFrame = cancel
   })(shims)
 
+  // shims.throttle
   ;(function (shims) {
     shims.throttle = function (fn, threshhold, ctx) {
       if (typeof fn !== 'function') throw new TypeError('Parameter fn is not a function')
@@ -180,6 +182,23 @@ window.onload = function () {
     }
   })(shims)
 
+  // shims.debounce
+  ;(function (shims) {
+    shims.debounce = function (fn, delay, ctx) {
+      if (typeof fn !== 'function') throw new TypeError('Parameter fn is not a function')
+      if (delay === void 0) delay = 250
+      var timer
+      return function () {
+        if (ctx === void 0) ctx = this
+        var args = arguments
+        window.clearTimeout(timer)
+        timer = window.setTimeout(function () {
+          fn.apply(ctx, args)
+        }, delay)
+      }
+    }
+  })(shims)
+
   // Pages initializing
   ;(function initTopicPage (shims) {
     // Import shims
@@ -190,6 +209,7 @@ window.onload = function () {
     var loopEventByFrame = shims.loopEventByFrame
     var cancelLoopEventByFrame = shims.cancelLoopEventByFrame
     var throttle = shims.throttle
+    var debounce = shims.debounce
     // HTML element class hooks
     var classContainer = 'j-overview-topic-container'
     var classItem = 'j-overview-topic-item'
@@ -296,7 +316,7 @@ window.onload = function () {
         })
       }, 60))
       // Mouse leaving navigation set right the selected item
-      addEvent($nav, 'mouseleave', function (e) {
+      addEvent($nav, 'mouseleave', debounce(function (e) {
         $selectedItem = ctx.get('$selectedItem')
         cancelLoopEventByFrame(scrollFrameId)
         scrollFrameId = loopEventByFrame(function loop () {
@@ -307,7 +327,7 @@ window.onload = function () {
           navScrollLeftDistance = navScrollLeftTo - navScrollLeft
           scroll(loop)
         })
-      })
+      }, 250))
     }
 
     // 1. Process switching themes, it require the execution context contains the $container which to be themed
