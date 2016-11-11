@@ -172,7 +172,7 @@ window.onload = function () {
     // Variable scrollReservZoneWidth define the width of the reserve zone on where the mouse moving event take no effect. The reserve zone locate in the beginning and the end of the scroll mapping zone. The scrollSpeedFactor control the speed of scrolling
     var classNavScrollZone = 'j-overview-topic-nav'
     var scrollReserveZoneWidth = 40
-    var scrollSpeedFactor = 0.2
+    var scrollSpeedFactor = 0.05
     // Prepared stuffs
     var bodyRect = document.body.getBoundingClientRect()
 
@@ -230,6 +230,28 @@ window.onload = function () {
       var navScrollMaxDistance, navScrollLeft, navScrollLeftTo, navScrollLeftDistance
       var $selectedItem
 
+      // Auxiliary function
+      function scroll (loop) {
+        if (navScrollLeftDistance > 0) {
+          // Positive distance means the $nav need to scroll toward right
+          if (navScrollLeftTo * scrollSpeedFactor < navScrollLeftDistance) {
+            $nav.scrollLeft += navScrollLeftTo * scrollSpeedFactor
+            scrollFrameId = loopEventByFrame(loop)
+          } else {
+            $nav.scrollLeft += navScrollLeftDistance
+          }
+        } else if (navScrollLeftDistance < 0) {
+          navScrollLeftDistance = -navScrollLeftDistance
+          // Negative distance means the $nav need to scroll toward left
+          if ((navScrollMaxDistance - navScrollLeftTo) * scrollSpeedFactor < navScrollLeftDistance) {
+            $nav.scrollLeft -= (navScrollMaxDistance - navScrollLeftTo) * scrollSpeedFactor
+            scrollFrameId = requestAnimationFrame(loop)
+          } else {
+            $nav.scrollLeft -= navScrollLeftDistance
+          }
+        }
+      }
+
       // Mouse moving on the navigation zone scroll the headings into the navigation view zone
       addEvent($nav, 'mousemove', function (e) {
         mouseOverX = e.pageX - (navRect.left - bodyRect.left)
@@ -243,34 +265,21 @@ window.onload = function () {
           navScrollLeft = $nav.scrollLeft
           navScrollLeftTo = navScrollMaxDistance * mouseOverRateX
           navScrollLeftDistance = navScrollLeftTo - navScrollLeft
-          if (navScrollLeftDistance > 0) {
-            // Positive distance means the $nav need to scroll toward right
-            if (navScrollLeftTo * scrollSpeedFactor < navScrollLeftDistance) {
-              $nav.scrollLeft += navScrollLeftTo * scrollSpeedFactor
-              scrollFrameId = loopEventByFrame(loop)
-            } else {
-              $nav.scrollLeft += navScrollLeftDistance
-            }
-          } else if (navScrollLeftDistance < 0) {
-            navScrollLeftDistance = -navScrollLeftDistance
-            // Negative distance means the $nav need to scroll toward left
-            if ((navScrollMaxDistance - navScrollLeftTo) * scrollSpeedFactor < navScrollLeftDistance) {
-              $nav.scrollLeft -= (navScrollMaxDistance - navScrollLeftTo) * scrollSpeedFactor
-              scrollFrameId = requestAnimationFrame(loop)
-            } else {
-              $nav.scrollLeft -= navScrollLeftDistance
-            }
-          }
+          scroll(loop)
         })
       })
       // Mouse leaving navigation set right the selected item
       addEvent($nav, 'mouseleave', function (e) {
         $selectedItem = ctx.get('$selectedItem')
-        if ($selectedItem) {
-          $nav.scrollLeft = $selectedItem.offsetLeft - $nav.offsetLeft
-        } else {
-          $nav.scrollLeft = 0
-        }
+        cancelLoopEventByFrame(scrollFrameId)
+        scrollFrameId = loopEventByFrame(function loop () {
+          if ($nav.scrollWidth <= navClientWidth) return
+          navScrollMaxDistance = $nav.scrollWidth - navClientWidth
+          navScrollLeft = $nav.scrollLeft
+          navScrollLeftTo = $selectedItem ? $selectedItem.offsetLeft - $nav.offsetLeft : 0
+          navScrollLeftDistance = navScrollLeftTo - navScrollLeft
+          scroll(loop)
+        })
       })
     }
 
