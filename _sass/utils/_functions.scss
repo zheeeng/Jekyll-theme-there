@@ -58,12 +58,29 @@
   }
 }
 
-@function list-scale ($list, $scale) {
-  $new-list: null;
-  @each $val in $list {
-    $new-list: append($new-list, round($val * $scale));
+@function scale-list ($list, $scale) {
+  @if type-of($list) != 'list' {
+    @error 'Expect $list to be list type';
   }
-  @return $new-list;
+  $new-list: ();
+  @if type-of($scale) == 'number' {
+    @each $val in $list {
+      $new-list: append($new-list, round($val * $scale));
+    }
+    @return $new-list;
+  } @else if type-of($scale) == 'list' {
+    @if length($list) == length($scale) {
+      $len: length($scale);
+      @for $i from 1 through $len {
+        $new-list: append($new-list, round(nth($list, $i) * nth($scale, $i)))
+      }
+      @return $new-list;
+    } @else {
+     @error 'Expect $scale\'s length is equal to $list\'s length';
+    }
+  } @else {
+    @error 'Expect $scale to be a number or a list';
+  }
 }
 
 @function list-join ($list, $separator: ' ') {
