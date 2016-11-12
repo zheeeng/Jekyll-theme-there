@@ -9,10 +9,11 @@
   }
 }
 
+@mixin clearstyle-edge {
+  padding: 0;
+  margin: 0;
+}
+
 @mixin clearstyle-list {
-  ul, ol {
-    list-style-type: none;
-    padding: 0;
-    margin: 0;
-  }
+  list-style-type: none;
 }
