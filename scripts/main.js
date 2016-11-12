@@ -236,15 +236,27 @@ window.onload = function () {
     // Variable scrollReservZoneWidth define the width of the reserve zone on where the mouse moving event take no effect. The reserve zone locate in the beginning and the end of the scroll mapping zone. The scrollSpeedFactor control the speed of scrolling
     var classNavScrollZone = 'j-overview-topic-nav'
     var scrollReserveZoneWidth = 40
-    var scrollSpeedFactor = 0.05
+    var scrollFPS = 30
     // Prepared stuffs
     var bodyRect = document.body.getBoundingClientRect()
+    var basicDelay = 250 // For debounce delay
 
+    // Utils
     function switchTheme ($el, theme) {
       forEach($el.classList, function (className) {
         if (/^theme\-/.test(className)) $el.classList.remove(className)
       })
       $el.classList.add('theme-' + theme)
+    }
+
+    function calculateTheSpeed (distance) {
+      var sign = distance > 0 ? 1 : -1
+      var sppedFactor = 0.5
+      var scrollMinimumSpeed = 1000 / 16
+      var speed = sign * scrollMinimumSpeed + sppedFactor * Math.sqrt(sign * distance)
+      return sign * speed < sign * distance
+        ? {speed: speed, lastStep: false}
+        : {speed: distance, lastStep: true}
     }
 
     // Decoupled processors
@@ -296,24 +308,9 @@ window.onload = function () {
 
       // Auxiliary function
       function scroll (loop) {
-        if (navScrollLeftDistance > 0) {
-          // Positive distance means the $nav need to scroll toward right
-          if (navScrollLeftTo * scrollSpeedFactor < navScrollLeftDistance) {
-            $nav.scrollLeft += navScrollLeftTo * scrollSpeedFactor
-            scrollFrameId = loopEventByFrame(loop)
-          } else {
-            $nav.scrollLeft += navScrollLeftDistance
-          }
-        } else if (navScrollLeftDistance < 0) {
-          navScrollLeftDistance = -navScrollLeftDistance
-          // Negative distance means the $nav need to scroll toward left
-          if ((navScrollMaxDistance - navScrollLeftTo) * scrollSpeedFactor < navScrollLeftDistance) {
-            $nav.scrollLeft -= (navScrollMaxDistance - navScrollLeftTo) * scrollSpeedFactor
-            scrollFrameId = requestAnimationFrame(loop)
-          } else {
-            $nav.scrollLeft -= navScrollLeftDistance
-          }
-        }
+        var speedObj = calculateTheSpeed(navScrollLeftDistance)
+        $nav.scrollLeft += speedObj.speed
+        if (!speedObj.lastStep) scrollFrameId = loopEventByFrame(loop)
       }
 
       // Mouse moving on the navigation zone scroll the headings into the navigation view zone
@@ -331,7 +328,7 @@ window.onload = function () {
           navScrollLeftDistance = navScrollLeftTo - navScrollLeft
           scroll(loop)
         })
-      }, 60))
+      }, 1000 / scrollFPS))
       // Mouse leaving navigation set right the selected item
       addEvent($nav, 'mouseleave', debounce(function (e) {
         $selectedItem = ctx.get('$selectedItem')
@@ -340,11 +337,11 @@ window.onload = function () {
           if ($nav.scrollWidth <= navClientWidth) return
           navScrollMaxDistance = $nav.scrollWidth - navClientWidth
           navScrollLeft = $nav.scrollLeft
-          navScrollLeftTo = $selectedItem ? $selectedItem.offsetLeft - $nav.offsetLeft : 0
+          navScrollLeftTo = Math.min(navScrollMaxDistance, $selectedItem ? $selectedItem.offsetLeft - $nav.offsetLeft : 0)
           navScrollLeftDistance = navScrollLeftTo - navScrollLeft
           scroll(loop)
         })
-      }, 250))
+      }, basicDelay))
     }
 
     // 1. Process switching themes, it require the execution context contains the $container which to be themed
