@@ -16,16 +16,16 @@ $overview-link-bar-margin: 0 get-right-value($overview-list-margin) 10px get-lef
 $overview-link-tag-padding: list-scale($overview-link-bar-padding, .5);
 $overview-link-tag-margin: 0 5px 5px 0;
 
-@mixin transition-all-500 {
-  transition : all .2s ease-in;
+@mixin transition-all {
+  transition : all .4s ease-in;
 }
-@mixin border-color-transition {
+@mixin transition-border-color {
   transition : border-color .4s ease-in;
 }
-@mixin font-color-transition {
-  transition : color .2s ease-in;
+@mixin transition-font-color {
+  transition : color .4s ease-in;
 }
-@mixin background-color-transition {
+@mixin transition-background-color {
   transition : background-color .4s ease-in;
 }
 
@@ -37,7 +37,7 @@ $overview-link-tag-margin: 0 5px 5px 0;
   overflow-y: auto;
   @include color('primary-fc');
   @include background-color('primary-bc');
-  @include background-color-transition;
+  @include transition-background-color;
 
   // h1 {
   //   font-size: 1.5em;
@@ -91,7 +91,7 @@ $overview-link-tag-margin: 0 5px 5px 0;
     margin: $overview-link-bar-margin;
     @include background-color('primary-bc-darken');
     @include color('secondary-fc');
-    @include font-color-transition;
+    @include transition-font-color;
 
     &:hover {
       @include background-color('primary-bc-lighten');
@@ -106,7 +106,7 @@ $overview-link-tag-margin: 0 5px 5px 0;
     border-radius: 5px;
     @include background-color('primary-bc-darken');
     @include color('secondary-fc');
-    @include font-color-transition;
+    @include transition-font-color;
 
     &:hover {
       @include background-color('primary-bc-lighten');
@@ -149,7 +149,7 @@ $overview-link-tag-margin: 0 5px 5px 0;
     vertical-align: bottom;
     padding: $overview-topic-heading-padding;
     margin: $overview-topic-heading-margin;
-    @include transition-all-500;
+    @include transition-all;
     &__selected {
       font-size: 2em;
       font-style: normal;
@@ -167,6 +167,13 @@ $overview-link-tag-margin: 0 5px 5px 0;
     &__selected {
       margin: $overview-topic-heading-margin;
     }
+  }
+
+  &_topic-heading {
+    font-size: 1.25em;
+    @include color('heading-fc');
+    @include clearstyle-edge;
+    @include transition-font-color;
   }
 }
 
@@ -223,7 +230,7 @@ $overview-link-tag-margin: 0 5px 5px 0;
 
   &_title {
     @include color('primary-fc');
-    @include font-color-transition;
+    @include transition-font-color;
   }
   &:hover #{get-last-selector()}_title {
     @include color('active-fc');
@@ -232,7 +239,7 @@ $overview-link-tag-margin: 0 5px 5px 0;
   &_excerpt {
     @include color('secondary-fc');
     margin-bottom: .3em;
-    @include font-color-transition;
+    @include transition-font-color;
   }
   &:hover #{get-last-selector()}_excerpt {
     @include color('primary-fc');
@@ -243,10 +250,10 @@ $overview-link-tag-margin: 0 5px 5px 0;
     font-style: italic;
 
     & #{get-last-selector()}-date {
-      @include font-color-transition;
+      @include transition-font-color;
     }
     & #{get-last-selector()}-comments {
-      @include font-color-transition;
+      @include transition-font-color;
     }
   }
   &:hover #{get-last-selector()}_meta {
@@ -271,7 +278,7 @@ $overview-link-tag-margin: 0 5px 5px 0;
     border-style: solid;
     border-width: 1px;
     border-radius: 1em;
-    @include border-color-transition;
+    @include transition-border-color;
 
     &:hover {
       @include border-color('primary-fc');
