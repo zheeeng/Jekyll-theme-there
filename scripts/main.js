@@ -2,6 +2,7 @@ window.onload = function () {
   // Shims to be fulfilled
   var shims = {
     context: null,
+    isArrayLike: null,
     forEach: null,
     filter: null,
     addEvent: null,
@@ -64,8 +65,19 @@ window.onload = function () {
     }
   })(shims)
 
+  // shims.isArrayLike
+  ;(function (shims) {
+    // return works on array like obj
+    shims.isArrayLike = function (arg) {
+      return arg && typeof arg.length === 'number' && arg.length > -1 && arg.length % 1 === 0 && typeof arg !== 'function'
+    }
+  })(shims)
+
   // shims.forEach
   ;(function (shims) {
+    // auxiliaries
+    var isArrayLike = shims.isArrayLike
+
     shims.forEach = (function () {
       if (Array.prototype.forEach) {
         return function (arrayLikeList, fn, thisArg) {
@@ -73,8 +85,9 @@ window.onload = function () {
         }
       } else {
         return function (arrayLikeList, fn, thisArg) {
-          if (arrayLikeList === null || arrayLikeList === void 0) throw new TypeError('Parameter arrayLikeList is null or undefined')
+          if (!isArrayLike(arrayLikeList)) throw new TypeError('Parameter arrayLikeList isn\'t array like')
           if (typeof fn !== 'function') throw new TypeError('Parameter fn is not a function')
+          if (thisArg === void 0) thisArg = this
           var o = Object(arrayLikeList)
           var len = o.length >>> 0
           var k = 0
@@ -90,6 +103,9 @@ window.onload = function () {
 
   // shims.filter
   ;(function (shims) {
+    // auxiliaries
+    var isArrayLike = shims.isArrayLike
+
     shims.filter = (function () {
       if (Array.prototype.filter) {
         return function (arrayLikeList, filter, thisArg) {
@@ -97,8 +113,9 @@ window.onload = function () {
         }
       } else {
         return function (arrayLikeList, filter, thisArg) {
-          if (arrayLikeList === null || arrayLikeList === void 0) throw new TypeError('Parameter arrayLikeList is null or undefined')
+          if (!isArrayLike(arrayLikeList)) throw new TypeError('Parameter arrayLikeList isn\'t array like')
           if (typeof filter !== 'function') throw new TypeError('Parameter filter is not a function')
+          if (thisArg === void 0) thisArg = this
           var o = Object(arrayLikeList)
           var len = o.length >>> 0
           var res = []
@@ -163,19 +180,19 @@ window.onload = function () {
 
   // shims.throttle
   ;(function (shims) {
-    shims.throttle = function (fn, threshhold, ctx) {
+    shims.throttle = function (fn, threshhold, thisArg) {
       if (typeof fn !== 'function') throw new TypeError('Parameter fn is not a function')
       if (threshhold === void 0) threshhold = 250
       var lastTime = 0
       var timer
       return function () {
-        if (ctx === void 0) ctx = this
+        if (thisArg === void 0) thisArg = this
         var currentTime = +new Date()
         var args = arguments
         var timeToCall = Math.max(0, threshhold - (currentTime - lastTime))
         window.clearTimeout(timer)
         timer = window.setTimeout(function () {
-          fn.apply(ctx, args)
+          fn.apply(thisArg, args)
           lastTime = currentTime + timeToCall
         }, timeToCall)
       }
@@ -184,16 +201,16 @@ window.onload = function () {
 
   // shims.debounce
   ;(function (shims) {
-    shims.debounce = function (fn, delay, ctx) {
+    shims.debounce = function (fn, delay, thisArg) {
       if (typeof fn !== 'function') throw new TypeError('Parameter fn is not a function')
       if (delay === void 0) delay = 250
       var timer
       return function () {
-        if (ctx === void 0) ctx = this
+        if (thisArg === void 0) thisArg = this
         var args = arguments
         window.clearTimeout(timer)
         timer = window.setTimeout(function () {
-          fn.apply(ctx, args)
+          fn.apply(thisArg, args)
         }, delay)
       }
     }
