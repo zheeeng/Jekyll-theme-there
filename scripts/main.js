@@ -30,15 +30,33 @@ window.onload = function () {
     // Set a new value of a specific property in the current scope
     function set (prop, value) {
       var local = this
-      if (!(local instanceof Scope)) throw Error('Expect set a new value on a Scope instance')
+      if (!(local instanceof Scope)) throw Error('Expect the set method is on a Scope instance')
       if (!(prop in local.__scope__)) local.__scope__[prop] = value
-      else throw Error('Can\'t set the value in an existed prop, mutate method is suggested')
+      else throw Error('Can\'t set the value in an existed property, mutate method is suggested')
     }
 
-    // Retrieval the first value of a specific property in the current scope or upper scope on scope chain
+    // Remove a specific property from the current scope
+    function remove (prop) {
+      var local = this
+      if (!(local instanceof Scope)) throw Error('Expect the remove method is on a Scope instance')
+      if (prop in local.__scope__) return delete local.__scope__[prop]
+      else throw Error('Can\'t remove the property which isn\'t existed')
+    }
+
+    // Retrieve && return whether a specific property in the current scope or upper scope on scope chain
+    function has (prop) {
+      var local = this
+      if (!(local instanceof Scope)) throw Error('Expect the has method is on a Scope instance')
+      while (local instanceof Scope && !(prop in local.__scope__) && local.__uber__) {
+        local = local.__uber__
+      }
+      return prop in local.__scope__
+    }
+
+    // Retrieve && return the first value of a specific property in the current scope or upper scope on scope chain
     function get (prop) {
       var local = this
-      if (!(local instanceof Scope)) throw Error('Expect get a value on a Scope instance')
+      if (!(local instanceof Scope)) throw Error('Expect the get method is on a Scope instance')
       while (local instanceof Scope && !(prop in local.__scope__) && local.__uber__) {
         local = local.__uber__
       }
@@ -48,7 +66,7 @@ window.onload = function () {
     // Mutate the first value of a specific property in the current scope or upper scope on scope chain
     function mutate (prop, value) {
       var local = this
-      if (!(local instanceof Scope)) throw Error('Expect mutate a value on a Scope instance')
+      if (!(local instanceof Scope)) throw Error('Expect the mutate method is on a Scope instance')
       while (local instanceof Scope && !(prop in local.__scope__) && local.__uber__) {
         local = local.__uber__
       }
@@ -76,12 +94,16 @@ window.onload = function () {
     if (Object.defineProperties) {
       Object.defineProperties(Scope.prototype, {
         'set': { value: set },
+        'remove': { value: remove },
+        'has': { value: has },
         'get': { value: get },
         'mutate': { value: mutate },
         'fork': { value: fork }
       })
     } else {
       Scope.prototype.set = set
+      Scope.prototype.remove = remove
+      Scope.prototype.has = has
       Scope.prototype.get = get
       Scope.prototype.mutate = mutate
       Scope.prototype.fork = fork
