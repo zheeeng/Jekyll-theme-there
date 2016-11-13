@@ -4,7 +4,6 @@ window.onload = function () {
     Scope: null,
     isArrayLike: null,
     forEach: null,
-    filter: null,
     addEvent: null,
     loopEventByFrame: null,
     cancelLoopEventByFrame: null,
@@ -12,7 +11,7 @@ window.onload = function () {
     debounce: null
   }
 
-  // shims.context
+  // shims.Scope
   ;(function (shims) {
     function Scope (context) {
       if (context === void 0) context = {}
@@ -157,35 +156,6 @@ window.onload = function () {
     })()
   })(shims)
 
-  // shims.filter
-  ;(function (shims) {
-    // auxiliaries
-    var isArrayLike = shims.isArrayLike
-
-    shims.filter = (function () {
-      if (Array.prototype.filter) {
-        return function (arrayLikeList, filter, thisArg) {
-          return Array.prototype.filter.call(arrayLikeList, filter, thisArg)
-        }
-      } else {
-        return function (arrayLikeList, filter, thisArg) {
-          if (!isArrayLike(arrayLikeList)) throw new TypeError('Parameter arrayLikeList isn\'t array like')
-          if (typeof filter !== 'function') throw new TypeError('Parameter filter is not a function')
-          if (thisArg === void 0) thisArg = this
-          var o = Object(arrayLikeList)
-          var len = o.length >>> 0
-          var res = []
-          var k = 0
-          while (k < len) {
-            if (k in o && filter.call(thisArg, o[k], k, o)) res.push(o[k])
-            k++
-          }
-          return res
-        }
-      }
-    })()
-  })(shims)
-
   // shims.addEvent
   ;(function (shims) {
     shims.addEvent = (function () {
@@ -277,7 +247,6 @@ window.onload = function () {
     // Import shims
     var Scope = shims.Scope
     var forEach = shims.forEach
-    var filter = shims.filter
     var addEvent = shims.addEvent
     var loopEventByFrame = shims.loopEventByFrame
     var cancelLoopEventByFrame = shims.cancelLoopEventByFrame
@@ -332,17 +301,9 @@ window.onload = function () {
       // Add mouse moving and mouse leaving events on the $nav
       addMouseEventsOnNavigation.call(ctx, $nav)
 
-      // Add clicking events on $items (on their $anchors in actually)
+      // Process the $items under the $nav
       var $items = $nav.getElementsByClassName(classItem)
-      if ($items) {
-        // Assign the initial selected item to the variable $selectedItem, only the first selected item counts
-        var $selectedItems = filter($items, function ($item) {
-          return $item.classList.contains(__itemSelected)
-        })
-        if ($selectedItems.length) ctx.mutate('$selectedItem', $selectedItems[0])
-        // Process the $items under the $nav
-        forEach($items, processItem, ctx)
-      }
+      if ($items) forEach($items, processItem, ctx)
     }
 
     // 1. Mouse moving event on navigation scroll the navigation bar
@@ -401,11 +362,16 @@ window.onload = function () {
     }
 
     // 1. Process switching themes, it require the execution context contains the $container which to be themed
-    // 2. and assign the selected item to the variable $selectedItem which reference to the $selectedItem in the execution context
+    // 2. and mutate the variable $selectedItem in the scope chain to the selected item
     function processItem ($item, index, $items) {
       var ctx = this.fork()
       ctx.get('$item')
       ctx.set('$item', $item)
+
+      // Assign the initial selected item to the variable $selectedItem, only the first selected item counts
+      if (!ctx.get('$selectedItem') && $item.classList.contains(__itemSelected)) {
+        ctx.mutate('$selectedItem', $item)
+      }
 
       var $container = ctx.get('$container')
 
@@ -413,6 +379,7 @@ window.onload = function () {
       var $anchors = $item.getElementsByClassName(classChangeAnchor)
       var $anchor = $anchors ? $anchors[0] : null
 
+      // Add clicking events on the $anchor
       if ($anchor) {
         addEvent($anchor, 'click', function (e) {
           e.preventDefault()
