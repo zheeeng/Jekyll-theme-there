@@ -1,7 +1,7 @@
 window.onload = function () {
   // Shims to be fulfilled
   var shims = {
-    context: null,
+    Scope: null,
     isArrayLike: null,
     forEach: null,
     filter: null,
@@ -14,54 +14,81 @@ window.onload = function () {
 
   // shims.context
   ;(function (shims) {
-    function Scope (uberScope) {
-      if (typeof uberScope !== 'object' || uberScope === null) throw TypeError('The uberScope isn\'t a object')
+    function Scope (context) {
+      if (context === void 0) context = {}
+      if (typeof context !== 'object' || context === null) throw TypeError('The context isn\'t a object')
+      var local = this
       if (Object.defineProperties) {
-        Object.defineProperties(this, {
-          '__uber__': { value: uberScope },
-          '__scope__': { value: {} }
-        })
+        Object.defineProperties(local, { '__scope__': { value: context } })
       } else {
-        this.__uber__ = uberScope
-        this.__scope__ = {}
+        local.__scope__ = context
       }
+
+      return local
     }
 
+    // Set a new value of a specific property in the current scope
     function set (prop, value) {
-      this.__scope__[prop] = value
+      var local = this
+      if (!(local instanceof Scope)) throw Error('Expect set a new value on a Scope instance')
+      if (!(prop in local.__scope__)) local.__scope__[prop] = value
+      else throw Error('Can\'t set the value in an existed prop, mutate method is suggested')
     }
 
+    // Retrieval the first value of a specific property in the current scope or upper scope on scope chain
     function get (prop) {
       var local = this
-      while (!(prop in local.__scope__) && local.hasOwnProperty('__uber__')) {
+      if (!(local instanceof Scope)) throw Error('Expect get a value on a Scope instance')
+      while (local instanceof Scope && !(prop in local.__scope__) && local.__uber__) {
         local = local.__uber__
       }
       return local.__scope__[prop]
     }
 
+    // Mutate the first value of a specific property in the current scope or upper scope on scope chain
     function mutate (prop, value) {
       var local = this
-      while (!(prop in local.__scope__) && local.hasOwnProperty('__uber__')) {
+      if (!(local instanceof Scope)) throw Error('Expect mutate a value on a Scope instance')
+      while (local instanceof Scope && !(prop in local.__scope__) && local.__uber__) {
         local = local.__uber__
       }
       if (prop in local.__scope__) local.__scope__[prop] = value
       else throw Error('No mutable prop ' + prop + ' in the scope chain')
     }
 
+    // Fork/create a new scope, the property __uber__ on the scope reference to its parent scope.
+    function fork () {
+      var uberScope = this
+      if (uberScope instanceof Scope) {
+        var local = new Scope()
+        if (Object.defineProperties) {
+          Object.defineProperties(local, { '__uber__': { value: uberScope } })
+          Object.freeze(local.__uber__)
+        } else {
+          local.__uber__ = uberScope
+        }
+        return local
+      } else {
+        throw Error('Expect fork a new scope on a Scope instance')
+      }
+    }
+
     if (Object.defineProperties) {
       Object.defineProperties(Scope.prototype, {
         'set': { value: set },
         'get': { value: get },
-        'mutate': { value: mutate }
+        'mutate': { value: mutate },
+        'fork': { value: fork }
       })
     } else {
       Scope.prototype.set = set
       Scope.prototype.get = get
       Scope.prototype.mutate = mutate
+      Scope.prototype.fork = fork
     }
 
-    shims.context = function (uberScope) {
-      return new Scope(uberScope)
+    shims.Scope = function ScopeFactory (context) {
+      return new Scope(context)
     }
   })(shims)
 
@@ -219,7 +246,7 @@ window.onload = function () {
   // Pages initializing
   ;(function initTopicPage (shims) {
     // Import shims
-    var context = shims.context
+    var Scope = shims.Scope
     var forEach = shims.forEach
     var filter = shims.filter
     var addEvent = shims.addEvent
@@ -261,20 +288,20 @@ window.onload = function () {
 
     // Decoupled processors
     function processContainer ($container, index, $containers) {
-      var ctx = this
+      var ctx = this.fork()
       ctx.set('$container', $container)
       // Process the $navs under the $container
       var $navs = $container.getElementsByClassName(classNavScrollZone)
-      if ($navs) forEach($navs, processNavigation, context(ctx))
+      if ($navs) forEach($navs, processNavigation, ctx)
     }
 
     function processNavigation ($nav) {
-      var ctx = this
+      var ctx = this.fork()
       ctx.set('$nav', $nav)
       ctx.set('$selectedItem', null)
 
       // Add mouse moving and mouse leaving events on the $nav
-      addMouseEventsOnNavigation.call(context(ctx), $nav)
+      addMouseEventsOnNavigation.call(ctx, $nav)
 
       // Add clicking events on $items (on their $anchors in actually)
       var $items = $nav.getElementsByClassName(classItem)
@@ -285,14 +312,14 @@ window.onload = function () {
         })
         if ($selectedItems.length) ctx.mutate('$selectedItem', $selectedItems[0])
         // Process the $items under the $nav
-        forEach($items, processItem, context(ctx))
+        forEach($items, processItem, ctx)
       }
     }
 
     // 1. Mouse moving event on navigation scroll the navigation bar
     // 2. Mouse leaving event on navigation scroll the selected heading into view
     function addMouseEventsOnNavigation ($nav) {
-      var ctx = this
+      var ctx = this.fork()
       var navRect = $nav.getBoundingClientRect()
       var navClientWidth = $nav.clientWidth
       var scrollFrameId
@@ -347,7 +374,8 @@ window.onload = function () {
     // 1. Process switching themes, it require the execution context contains the $container which to be themed
     // 2. and assign the selected item to the variable $selectedItem which reference to the $selectedItem in the execution context
     function processItem ($item, index, $items) {
-      var ctx = this
+      var ctx = this.fork()
+      ctx.get('$item')
       ctx.set('$item', $item)
 
       var $container = ctx.get('$container')
@@ -372,7 +400,7 @@ window.onload = function () {
     // Initialization entry
     var $containers = document.getElementsByClassName(classContainer)
     if ($containers) {
-      forEach($containers, processContainer, context({}))
+      forEach($containers, processContainer, Scope({}))
     }
   })(shims)
 }
