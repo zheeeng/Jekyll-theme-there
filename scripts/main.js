@@ -253,7 +253,7 @@ window.onload = function () {
     var throttle = shims.throttle
     var debounce = shims.debounce
     // HTML element class hooks
-    var classContainer = 'j-overview-topic-container'
+    var classContainer = 'j-overview-container'
     var classItem = 'j-overview-topic-item'
     var classChangeAnchor = 'j-overview-topic-change'
     var __itemSelected = 'overview_topic-item__selected'
