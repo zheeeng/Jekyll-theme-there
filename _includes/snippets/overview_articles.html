@@ -1,46 +1,46 @@
 <div class="overview_page">
   <!-- Start: Search Articles -->
-  <div class="overview_zone">
-    <h1 class="overview_heading">
+  <div class="overview_block">
+    <h2 class="overview_heading">
       <span class="fa-stack overview-icon">
         <i class="fa fa-circle-thin fa-stack-2x overview-icon_wrapper"></i>
         <i class="fa fa-search fa-stack-1x overview-icon_itself"></i>
       </span>
-      <a href="">Search Articles...</a>
-    </h1>
+      <span href="">Search...</span>
+    </h2>
   </div>
   <!-- End: Search Articles -->
 
   <!-- Start: Latest Articles -->
-  <div class="overview_zone">
-    <h1 class="overview_heading overview_heading__with-time-line">
+  <div class="overview_block">
+    <h2 class="overview_heading overview_heading__with-time-line">
       <span class="fa-stack overview-icon">
         <i class="fa fa-circle-thin fa-stack-2x overview-icon_wrapper"></i>
         <i class="fa fa-bars fa-stack-1x overview-icon_itself"></i>
       </span>
-      <a href="#">Latest Articles</a>
-    </h1>
+      Latest Articles
+    </h2>
 
     <ul>
       {% for post in site.posts %}
       <li class="overview-post overview-post__with-time-line">
-        <h2 class="overview-post_title">
-          <a href="{{ post.url | prepend: site.baseurl }}">
+        <h3 class="overview-post_title">
+          <a class="overview_link" href="{{ post.url | prepend: site.baseurl }}">
             <span class="fa-stack overview-icon">
               <i class="fa fa-circle-thin fa-stack-2x overview-icon_wrapper"></i>
               <i class="fa fa-circle fa-stack-1x overview-icon_itself"></i>
             </span>
             {{ post.title }}
           </a>
-        </h2>
+        </h3>
         <p class="overview-post_excerpt">
-          <a href="{{ post.url | prepend: site.baseurl }}">
+          <a class="overview_link" href="{{ post.url | prepend: site.baseurl }}">
             {{ post.excerpt | strip_html | strip_newlines | truncate: 160 }}
           </a>
         </p>
         <div class="overview-post_meta">
           <p>
-            <a href="{{ post.url | prepend: site.baseurl }}">
+            <a class="overview_link" href="{{ post.url | prepend: site.baseurl }}">
               posted on <span class="overview-post_meta-date">{{ post.date | date: "%b %-d, %Y" }} </span>
               comments: <span class="overview-post_meta-comments">120</span>
             </a>
@@ -50,23 +50,23 @@
       {% endfor %}
     </ul>
 
-    <div class="overview-post_view-more-articles">
-      <a class="overview-post_btn" href="#">VIEW MORE</a>
+    <div class="overview-post_view-more">
+      <a class="overview_btn" href="#">VIEW MORE</a>
     </div>
 
   </div>
   <!-- End: Latest Articles -->
 
   <!-- Start: Categories -->
-  <div class="overview_zone">
+  <div class="overview_block">
 
-    <h1 class="overview_heading">
+    <h2 class="overview_heading">
       <span class="fa-stack overview-icon">
         <i class="fa fa-circle-thin fa-stack-2x overview-icon_wrapper"></i>
         <i class="fa fa-book fa-stack-1x overview-icon_itself"></i>
       </span>
-      <a href="">Categories</a>
-    </h1>
+      Categories
+    </h2>
 
     <ul>
       <li class="overview-categories">
@@ -90,15 +90,15 @@
   <!-- End: Categories -->
 
   <!-- Start: Tags -->
-  <div class="overview_zone">
+  <div class="overview_block">
 
-    <h1 class="overview_heading">
+    <h2 class="overview_heading">
       <span class="fa-stack overview-icon">
         <i class="fa fa-circle-thin fa-stack-2x overview-icon_wrapper"></i>
         <i class="fa fa-tags fa-flip-vertical fa-stack-1x overview-icon_itself"></i>
       </span>
-      <a href="">Tags</a>
-    </h1>
+      Tags
+    </h2>
 
     <ul class="overview-tags_container">
       <li class="overview-tags">
@@ -167,15 +167,15 @@
   <!-- End: Tags -->
 
   <!-- Start: Archives -->
-  <div class="overview_zone">
+  <div class="overview_block">
 
-    <h1 class="overview_heading">
+    <h2 class="overview_heading">
       <span class="fa-stack overview-icon">
         <i class="fa fa-circle-thin fa-stack-2x overview-icon_wrapper"></i>
         <i class="fa fa-archive fa-stack-1x overview-icon_itself"></i>
       </span>
-      <a href="">Archives</a>
-    </h1>
+      Archives
+    </h2>
 
     <ul>
       <li class="overview-archive">
