@@ -1,81 +1,140 @@
-$overview-margin: 0 0 20px 0;
 $overview-padding: 10px 0 25px 0;
+$overview-paragraph-padding: 0 0 5px 0;
+$overview-paragraph-margin: 0 0 0 0;
 
 $overview-topic-nav-padding: 0 0 0 0;
 $overview-topic-nav-margin: 0 15px 0 15px;
-$overview-topic-item-padding: 10px 10px 10px 10px;
+$overview-topic-item-padding: 5px 5px 5px 5px;
 $overview-topic-item-margin: 10px 10px 10px 10px;
 
-$overview-zone-margin: 15px 0 15px 0;
+$overview-block-padding: 0 0 0 0;
+$overview-block-margin: 10px 0 10px 0;
 // 1px padding-bottom for avoiding margin collapsing
-$overview-list-padding: 0 0 1px 30px;
-$overview-list-margin: 0 20px 0 36px;
+$overview-item-padding: 0 0 8px 30px;
+$overview-item-margin: 0 20px 0 35px;
+$overview-link-btn-padding: .5em 1em .5em 1em;
+$overview-link-btn-margin: 5px 10px 5px 10px;
 $overview-link-bar-padding: 5px 20px 5px 20px;
-$overview-link-bar-margin: 0 get-right-value($overview-list-margin) 10px get-left-value($overview-list-margin);
+$overview-link-bar-margin: 0 get-right-value($overview-item-margin) 10px get-left-value($overview-item-margin);
 $overview-link-tag-padding: scale-list($overview-link-bar-padding, .5);
 $overview-link-tag-margin: 0 5px 5px 0;
-
-@mixin transition-all {
-  transition : all .4s ease-in;
-}
-@mixin transition-border-color {
-  transition : border-color .4s ease-in;
-}
-@mixin transition-font-color {
-  transition : color .4s ease-in;
-}
-@mixin transition-background-color {
-  transition : background-color .4s ease-in;
-}
 
 %overview-base {
   width: 100%;
   height: 100%;
   padding: $overview-padding;
-  font-size: 1rem;
+  margin: 0 !important;
   overflow-y: auto;
   @include color('primary-fc');
+  font-size: 1rem;
   @include background-color('primary-bc');
-  @include transition-background-color;
+  @include transition((color, background-color));
+}
 
-  // h1 {
-  //   font-size: 1.5em;
-  //   font-weight: 500;
-  //   padding-bottom: .5em;
-  //   margin-bottom: 0;
-  // }
-  // h2, h3, h4, h5, h6 {
-  //   font-size: 1.25em;
-  //   font-weight: 400;
-  //   padding-bottom: .3em;
-  //   margin-bottom: 0;
-  // }
-  // p {
-  //   font-size: 1em;
-  //   padding-bottom: .2em;
-  //   margin-bottom: 0;
-  // }
-  // @include clearstyle-list;
+%overview-heading-base {
+  cursor: default;
+}
+
+%overview-h1 {
+  @extend %overview-heading-base;
+  @include clearstyle-edge;
+  @include color('heading-fc');
+  font-size: 1.5em; @include transition((color, font-size, font-style));
+  font-weight: 400; font-style: italic;
+  &:hover {
+    font-size: 2em; font-style: normal;
+  }
+}
+
+%overview-h2 {
+  @extend %overview-heading-base;
+  @include clearstyle-edge;
+  @include color('active-fc'); @include transition(color);
+  font-size: 1.5em; font-weight: 400;
+  &:hover {}
+}
+
+%overview-h3 {
+  @extend %overview-heading-base;
+  @include clearstyle-edge;
+  @include color('primary-fc'); @include transition(color);
+  font-size: 1.25em; font-weight: 300;
+  &:hover {
+    @include color('primary-fc-lighten');
+  }
+}
+
+%overview-p {
+  @extend %overview-heading-base;
+  padding: $overview-paragraph-padding;
+  margin: $overview-paragraph-margin;
+  @include color('secondary-fc'); @include transition(color);
+  font-size: 1em;
+  &:hover {
+    @include color('primary-fc');
+  }
+}
+
+%overview-anchor {
+  color: inherit;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+%overview-btn {
+  @extend %overview-anchor;
+  padding: $overview-link-btn-padding;
+  margin: $overview-link-btn-margin;
+  @include border-color('secondary-fc-darken');
+  border-style: solid; border-width: 1px; border-radius: 1em;
+  color: inherit; font-size: .875em;
+  @include background-color('primary-bc-darken');
+  @include transition((border-color, background-color));
+  &:hover {
+    @include border-color('primary-fc');
+    @include background-color('primary-bc-lighten');
+  }
+}
+
+%overview-ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  &:hover {}
+}
+
+%overview-li {}
+%overview-li:hover {}
+
+%overview-meta {
+  @include color('secondary-fc'); @include transition(color);
+  &:hover {}
+}
+
+%overview-meta-element {
+  @include color('secondary-fc'); @include transition(color);
+  &:hover {
+    @include color('primary-fc');
+  }
 }
 
 // create an item container
 // @param   {enumerable string}  type: the type of the container
-@mixin item-container ($type) {
+@mixin item-wrapper ($type) {
   @if $type == 'heading' {
     position: relative;
-    padding: $overview-list-padding;
-    margin-left: get-left-value($overview-list-margin);
-    margin-right: get-right-value($overview-list-margin);
-    @include border-left-color('primary-bc');
+    padding: $overview-item-padding;
+    margin: $overview-item-margin;
+    @include border-left-color('primary-bc'); @include transition(border-color);
     border-left-style: solid;
     border-left-width: 1px;
 
-    #{glue-class-modifier('__with-time-line')} {
+    &__with-time-line {
       @include border-left-color('secondary-fc-darken');
     }
   } @else if $type == 'entry' {
-    margin-left: get-left-value($overview-list-margin);
-    margin-right: get-right-value($overview-list-margin);
+    padding: $overview-item-padding;
+    margin: $overview-item-margin;
   } @else {
     @warn 'Container type \'#{$type}\' didn\'t define.';
   }
@@ -88,9 +147,8 @@ $overview-link-tag-margin: 0 5px 5px 0;
     display: block;
     padding: $overview-link-bar-padding;
     margin: $overview-link-bar-margin;
-    @include background-color('primary-bc-darken');
-    @include color('secondary-fc');
-    @include transition-font-color;
+    @include background-color('primary-bc-darken'); @include transition(background-color);
+    @include color('secondary-fc'); @include transition(color);
 
     &:hover {
       @include background-color('primary-bc-lighten');
@@ -100,12 +158,9 @@ $overview-link-tag-margin: 0 5px 5px 0;
     display: inline-block;
     padding: $overview-link-tag-padding;
     margin: $overview-link-tag-margin;
-    border-style: solid;
-    border-width: 1px;
-    border-radius: 5px;
-    @include background-color('primary-bc-darken');
-    @include color('secondary-fc');
-    @include transition-font-color;
+    border-style: solid; border-width: 1px; border-radius: 5px;
+    @include background-color('primary-bc-darken'); @include transition(background-color);
+    @include color('secondary-fc'); @include transition(color);
 
     &:hover {
       @include background-color('primary-bc-lighten');
@@ -117,6 +172,31 @@ $overview-link-tag-margin: 0 5px 5px 0;
 }
 
 .overview {
+  @extend %overview-base;
+
+  &_link {
+    @extend %overview-anchor;
+  }
+
+  &_btn {
+    @extend %overview-btn;
+
+    &:hover {
+      @extend %overview-btn:hover;
+    }
+  }
+
+  &_header {}
+
+  &_main {}
+
+  &_zone {}
+
+  &_block {
+    padding: $overview-block-padding;
+    margin: $overview-block-margin;
+  }
+
   &_topic-nav {
     overflow: hidden;
     padding: $overview-topic-nav-padding;
@@ -124,7 +204,7 @@ $overview-link-tag-margin: 0 5px 5px 0;
   }
 
   &_topic-list {
-    @include clearstyle-edge;
+    @extend %overview-ul;
     white-space: nowrap;
     &::after {
       // Simulate the style of .overview_topic-list-item > .overview_topic-list-heading for avoiding topic heading joggling in mobile device
@@ -140,14 +220,12 @@ $overview-link-tag-margin: 0 5px 5px 0;
 
   &_topic-item {
     display: inline-block;
-    font-style: italic;
     padding: $overview-topic-item-padding;
-    margin: $overview-topic-item-margin;
-    @include transition-all;
+    margin: $overview-topic-item-margin; @include transition(margin);
+    font-style: italic;
     &__selected {
-      font-size: 1.6em;
-      font-style: normal;
       margin: scale-list($overview-topic-item-margin, (1 10 1 1));
+      font-style: normal;
     }
     &:nth-last-child(3)#{&}__selected {
       margin: scale-list($overview-topic-item-margin, (1 6 1 1));
@@ -158,158 +236,118 @@ $overview-link-tag-margin: 0 5px 5px 0;
     &:last-child#{&}__selected {
       margin: $overview-topic-item-margin;
     }
-    &:hover {
-      font-size: 1.6em;
-      font-style: normal;
-    }
   }
   &_topic-list:hover &_topic-item {
-    &__selected {
-      margin: $overview-topic-item-margin;
-    }
+    margin: $overview-topic-item-margin;
+    font-style: normal;
   }
 
   &_topic-heading {
-    font-size: 1.25em;
-    @include color('heading-fc');
-    @include clearstyle-edge;
-    @include transition-font-color;
+    @extend %overview-h1;
+    &:hover {
+      @extend %overview-h1:hover;
+    }
   }
-}
-
-.overview {
-  @extend %overview-base;
-
-  &_zone {
-    @include clearfix;
-    margin: $overview-zone-margin;
-
-    #{glue-class-modifier('__latest-articles')} {
-    }
-
-    #{glue-class-modifier('__categories')} {
-    }
-
-    #{glue-class-modifier('__tags')} {
-    }
-
-    #{glue-class-modifier('__archives')} {
-    }
+  &_topic-item__selected &_topic-heading {
+    @extend %overview-h1:hover;
   }
 
   &_heading {
-    @include item-container('heading');
-    @include color('active-fc');
+    @include item-wrapper('heading');
+    @extend %overview-h2;
   }
 }
 
-.overview .overview-icon {
+.overview-icon {
   position: absolute;
   left: -1em;
-  font-size: .75em;
-  @include background-color('primary-bc');
+  color: inherit; font-size: .75em;
+  @include background-color('primary-bc'); @include transition(background-color);
+  @include transition(color);
 
-  @at-root #{prepend-selector('a >')} {
+  a > & {
     @include color('secondary-fc-darken');
   }
-
-  @at-root #{prepend-selector('a:visited >')} {
+  a:visited > & {
     @include color('visited-fc');
   }
 
   &_wrapper {
-    @include color('secondary-fc-darken');
+    @include color('secondary-fc-darken'); @include transition(color);
   }
 
-  &_itselft {
-  }
+  &_itself {}
 }
 
-.overview .overview-post {
-  @include item-container('heading');
+.overview-post {
+  @include item-wrapper('heading');
 
   &_title {
-    @include color('primary-fc');
-    @include transition-font-color;
+    @extend %overview-h3;
   }
-  &:hover #{get-last-selector()}_title {
-    @include color('active-fc');
+  &:hover &_title {
+    @extend %overview-h3:hover;
   }
 
   &_excerpt {
-    @include color('secondary-fc');
-    margin-bottom: .3em;
-    @include transition-font-color;
+    @extend %overview-p;
   }
-  &:hover #{get-last-selector()}_excerpt {
-    @include color('primary-fc');
+  &:hover &_excerpt {
+    @extend %overview-p:hover;
   }
 
   &_meta {
-    @include color('secondary-fc');
-    font-style: italic;
-
-    & #{get-last-selector()}-date {
-      @include transition-font-color;
-    }
-    & #{get-last-selector()}-comments {
-      @include transition-font-color;
-    }
-  }
-  &:hover #{get-last-selector()}_meta {
-    & #{get-last-selector()}-date {
-      @include color('primary-fc');
-    }
-    & #{get-last-selector()}-comments {
-      @include color('primary-fc');
-    }
+    @extend %overview-meta;
   }
 
-  &_view-more-articles {
-    margin: $overview-zone-margin;
+  &_meta-date {
+    @extend %overview-meta-element;
+  }
+  &:hover &_meta-date {
+    @extend %overview-meta-element:hover;
+  }
+
+  &_meta-comments {
+    @extend %overview-meta-element;
+  }
+  &:hover &_meta-comments {
+    @extend %overview-meta-element:hover;
+  }
+
+  &_view-more {
+    padding: $overview-block-padding;
+    margin: $overview-block-margin;
     text-align: center;
-    font-size: .875em;
-  }
-
-  &_btn {
-    display: inline-block;
-    padding: .5em 1em;
-    @include border-color('secondary-fc-darken');
-    border-style: solid;
-    border-width: 1px;
-    border-radius: 1em;
-    @include transition-border-color;
-
-    &:hover {
-      @include border-color('primary-fc');
-    }
   }
 }
 
-.overview .overview-categories {
+.overview-categories {
   &_link {
+    @extend %overview-anchor;
     @include item-link('bar');
   }
   &_name {
   }
 }
 
-.overview .overview-tags {
+.overview-tags {
   display: inline-block;
 
   &_container {
-    @include item-container('entry');
+    @include item-wrapper('entry');
   }
 
   &_link {
+    @extend %overview-btn;
     @include item-link('tag');
   }
   &_name {
   }
 }
 
-.overview .overview-archive {
+.overview-archive {
   &_link {
+    @extend %overview-anchor;
     @include item-link('bar');
   }
   &_date {
