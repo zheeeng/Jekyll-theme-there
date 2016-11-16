@@ -1,3 +1,9 @@
+@mixin scope ($scope) {
+  #{$scope} {
+    @content;
+  }
+}
+
 @mixin clearfix() {
   &:before,
   &:after {
