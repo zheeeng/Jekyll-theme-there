@@ -24,12 +24,17 @@
   list-style-type: none;
 }
 
+$transition-position: top, right, left, bottom;
+$transition-box: width, height, padding, border-width, margin;
+$transition-font: color, font-size, font-weight, font-style;
+$transition-apperance: opacity, background-color, border-color, outline-color;
+
 @mixin transition ($property: (), $duration: (), $time: (), $delay: ()) {
   $transition-list: ();
   @for $i from 1 through length($property) {
     $pr: nth($property, $i);
     $du: if(length($duration) != 0, if(length($duration) == 1, $duration, nth($duration, $i)), .4s);
-    $ti: if(length($time) != 0, if(length($time) == 1, $time, nth($time, $i)), '');
+    $ti: if(length($time) != 0, if(length($time) == 1, $time, nth($time, $i)), 'ease');
     $de: if(length($delay) != 0, if(length($delay) == 1, $delay, nth($delay, $i)), '');
     $transition: $pr + ' ' + $du + if($ti != '', ' ' + $ti, '') + if($de != '', ' ' + $de, '');
     $transition-list: join($transition-list, inspect(unquote($transition)), comma);
