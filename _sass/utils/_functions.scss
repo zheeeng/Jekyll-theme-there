@@ -58,6 +58,14 @@
   }
 }
 
+@function join-list ($list...) {
+  $ret: ();
+  @for $i from 1 through length($list) {
+    $ret: join($ret, nth($list, $i));
+  }
+  @return $ret;
+}
+
 @function scale-list ($list, $scale) {
   @if type-of($list) != 'list' {
     @error 'Expect $list to be list type';
